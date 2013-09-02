@@ -135,6 +135,11 @@ $result = mysql_query( $query );
 // Now let us see what happened to our MySQL query
 if ( mysql_affected_rows() == -1 ) {
 	// Notify program owner
+	$SENDSMS['mo_id'] = 0;
+	$SENDSMS['txid'] = $_REQUEST['motxid'];
+	$SENDSMS['mobtel'] = $PROGRAM_OWNER;
+	$SENDSMS['message'] = 'ERROR:globe/grab.php:fail_insert:query:'. $query;
+	hit_http_url($SENDSMS['url'], $SENDSMS['data'], 'get');
 	exit();
 } else {
 	$mo_id = mysql_insert_id();
@@ -145,10 +150,9 @@ if ( mysql_affected_rows() == -1 ) {
 // First time to send?
 if ( first_send( $mo_from, $dblink ) === FALSE ) {
 	$SENDSMS['mo_id'] = $mo_id;
-	$SENDSMS['parameters']['CSP_Txid'] = $_REQUEST['motxid'];
-	$SENDSMS['parameters']['SMS_MsgTxt'] = $WELCOME_MSG;
-	$SENDSMS['parameters']['SUB_C_Mobtel'] = $mo_from;
-	$SENDSMS['parameters']['SUB_R_Mobtel'] = $mo_from;
+	$SENDSMS['txid'] = $_REQUEST['motxid'];
+	$SENDSMS['message'] = $WELCOME_MSG;
+	$SENDSMS['mobtel'] = $mo_from;
 	// Send the welcome message
 	sms_mt_request( $SENDSMS );
 }
