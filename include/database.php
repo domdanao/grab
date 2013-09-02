@@ -10,7 +10,7 @@ if (array_key_exists("RDS_HOSTNAME", $_SERVER) and array_key_exists("RDS_PORT", 
 		or
 		die ("ERROR:" . mysql_error());
 	mysql_select_db($_SERVER["RDS_DB_NAME"]);
-	print "CONNECTED REMOTE";
+	print "CONNECTED REMOTE: " . $_SERVER["RDS_DB_NAME"];
 
 } else {
 
