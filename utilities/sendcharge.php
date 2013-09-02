@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(0);
+
 ##################################################
 ### CHARGING URL and PARAMETERS
 ### This is for Globe RT Billing service
@@ -35,7 +37,56 @@ $SENDCHARGE = array(
 
 ##################################################
 // Request parameters
+$SENDCHARGE['mo_id'] = $mo_id = $_REQUEST['mo_id'];
+$SENDCHARGE['parameters']['CSP_Txid'] = $txid = $_REQUEST['txid'];
+$SENDCHARGE['parameters']['SUB_C_Mobtel'] = $mobtel = $_REQUEST['mobtel'];
+$charge = $_REQUEST['charge'];
+$SENDCHARGE['parameters']['CSP_A_Keyword'] = $keyword = $CHG_VALS[$charge];
 
+##################################################
+// Response variables
+$response = array(
+	'response'	=>	'',
+	'reason'	=>	'',
+	'request'	=> array(
+		'mo_id'		=> $mo_id,
+		'mobtel'	=> $mobtel,
+		'txid'		=> $txid,
+		'charge'	=> $charge,
+		'keyword'	=> $keyword,
+		'ipaddr'	=> $_SERVER['REMOTE_ADDR']
+	),
+	'headers'	=> array()
+);
+
+##################################################
+// Parameters tests
+if (!$mo_id or !$keyword or !$txid or !$mobtel) {
+	// Incomplete parameters, error
+	$response['response'] = 'ERROR';
+	$response['reason']	= 'Incomplete parameters';
+} else {
+	$reply = hit_http_url($SENDCHARGE['url'], $SENDCHARGE['parameters'], 'get');
+
+	if (isset($reply['errno']) or isset($reply['errtxt'])) {
+		// Curl error
+		$response['response'] = 'ERROR';
+		$response['reason'] = 'CURL error ' . $reply['errno'] . '/' . $reply['errtxt'];
+	} else {
+		$response['headers'] = $reply['headers'];
+		if ($reply['http_code'] == 200) {
+			// We were able to charge
+			$response['response'] = 'OK';
+			$response['reason'] = $reply['http_code'];
+		} else {
+			// Charge not done
+			$response['response'] = 'NOK';
+			$response['reason'] = $reply['http_code'];
+		}
+	}
+}
+
+print json_encode($response,JSON_PRETTY_PRINT);
 
 
 ##################################################
@@ -55,9 +106,11 @@ function hit_http_url( $url, $data, $method = 'post', $timeout = 15 ) {
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, http_build_query( $data ) );
 	}
 	$return = curl_exec( $ch );
+	$headers = get_headers_from_curl_response($return);
 	if( !curl_errno( $ch ) ) {
 		$ch_info = curl_getinfo($ch);
 		$ch_info['body_content'] = $return;
+		$ch_info['headers'] = $headers;
 	} else {
 		$ch_info['errno'] = curl_errno( $ch );
 		$ch_info['errtxt'] = curl_error( $ch );
@@ -66,4 +119,19 @@ function hit_http_url( $url, $data, $method = 'post', $timeout = 15 ) {
 	return $ch_info;
 }
 
+function get_headers_from_curl_response($response) {
+	$headers = array();
+
+	$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
+
+	foreach (explode("\r\n", $header_text) as $i => $line) {
+		if ($i === 0) {
+			$headers['http_code'] = $line;
+		} else {
+			list ($key, $value) = explode(': ', $line);
+			$headers[$key] = $value;
+		}
+	}
+    return $headers;
+}
 ?>

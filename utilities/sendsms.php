@@ -2,6 +2,7 @@
 ##################################################
 // SIMPLE SENDSMS SERVICE
 
+error_reporting(0);
 
 ##################################################
 // Initialize SMS parameters
@@ -44,19 +45,22 @@ $response = array(
 		'mo_id'		=> $mo_id,
 		'mobtel'	=> $mobtel,
 		'txid'		=> $txid,
-		'message'	=> $message
-	)
+		'message'	=> $message,
+		'ipaddr'	=> $_SERVER['REMOTE_ADDR'] ),
+	'headers'	=> array()
 );
+
+$reply = false;
 
 ##################################################
 // Parameters tests
 if (!$mo_id or !$message or !$txid or !$mobtel) {
-	// Incompmete parameters, error
+	// Incomplete parameters, error
 	$response['response'] = 'ERROR';
 	$response['reason']	= 'Incomplete parameters';
 } else {
 	$reply = hit_http_url($SENDSMS['url'], $SENDSMS['parameters'], 'get');
-	
+
 	if (isset($reply['errno']) or isset($reply['errtxt'])) {
 		// Curl error
 		$response['response'] = 'ERROR';
@@ -64,10 +68,11 @@ if (!$mo_id or !$message or !$txid or !$mobtel) {
 	} else {
 		$response['response'] = 'OK';
 		$response['reason'] = $reply['http_code'];
+		$response['headers'] = $reply['headers'];
 	}
 }
 
-print json_encode($response);
+print json_encode($response,JSON_PRETTY_PRINT);
 
 
 ##################################################
@@ -87,9 +92,13 @@ function hit_http_url( $url, $data, $method = 'post', $timeout = 15 ) {
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, http_build_query( $data ) );
 	}
 	$return = curl_exec( $ch );
+
+	$headers = get_headers_from_curl_response($return);
+
 	if( !curl_errno( $ch ) ) {
 		$ch_info = curl_getinfo($ch);
 		$ch_info['body_content'] = $return;
+		$ch_info['headers'] = $headers;
 	} else {
 		$ch_info['errno'] = curl_errno( $ch );
 		$ch_info['errtxt'] = curl_error( $ch );
@@ -98,4 +107,19 @@ function hit_http_url( $url, $data, $method = 'post', $timeout = 15 ) {
 	return $ch_info;
 }
 
+function get_headers_from_curl_response($response) {
+	$headers = array();
+
+	$header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
+
+	foreach (explode("\r\n", $header_text) as $i => $line) {
+		if ($i === 0) {
+			$headers['http_code'] = $line;
+		} else {
+			list ($key, $value) = explode(': ', $line);
+			$headers[$key] = $value;
+		}
+	}
+    return $headers;
+}
 ?>
