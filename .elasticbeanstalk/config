@@ -1,6 +1,6 @@
 [global]
+AwsCredentialFile=/Users/domdanao/.elasticbeanstalk/aws_credential_file
 ApplicationName=grab-api
 DevToolsEndpoint=git.elasticbeanstalk.ap-southeast-1.amazonaws.com
 EnvironmentName=grabapi-env
 Region=ap-southeast-1
-AwsCredentialFile=/Users/domdanao/.elasticbeanstalk/aws_credential_file
