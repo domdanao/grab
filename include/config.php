@@ -100,25 +100,25 @@ $PROG_BASE = '/grab';
 // KEYWORD URLs
 
 // URL for keyword BAG
-$BAG_PATH = $BASE_URL . "/zed_grab_bag.php";
+$BAG_PATH = $BASE_URL . "/grab_bag.php";
 
 // URL for keyword REG
-$REG_PATH = $BASE_URL . "/zed_grab_reg.php";
+$REG_PATH = $BASE_URL . "/grab_reg.php";
 
 // URL for keyword HELP
-$HELP_PATH = $BASE_URL . "/zed_grab_help.php";
+$HELP_PATH = $BASE_URL . "/grab_help.php";
 
 // URL for keyword TIME
-$TIME_PATH = $BASE_URL . "/zed_grab_time.php";
+$TIME_PATH = $BASE_URL . "/grab_time.php";
 
 // URL for keyword ON/OFF
-$SUBSCRIBE_PATH = $BASE_URL . "/zed_grab_subscribe.php";
+$SUBSCRIBE_PATH = $BASE_URL . "/grab_subscribe.php";
 
 // URL for keyword UNLI
-$UNLI_PATH = $BASE_URL . "/zed_grab_unli.php";
+$UNLI_PATH = $BASE_URL . "/grab_unli.php";
 
 // Default URL
-$DEFAULT_PATH = $BASE_URL . "/zed_grab_main.php";
+$DEFAULT_PATH = $BASE_URL . "/grab_main.php";
 
 
 ##################################################
@@ -146,46 +146,12 @@ $WELCOME_MSG = "Welcome to GRAB A GADGET PROMO! Participating in GRAB means you 
 ### SENDSMS URL and PARAMETERS
 ### This is for Globe SMS MT service
 
-/*
-http://203.177.154.95/sam/cpvas?CP_Id=zed
-&CP_UserId=zed
-&CP_Password=zed12345
-&CSP_ContentType=TM
-&SMS_MsgTxt=test+message
-&SMS_Msgdata=
-&SMS_SourceAddr=28892
-&CSP_A_Keyword=INFOPULL
-&CSP_S_Keyword=CHECK
-&CSP_Txid=34839484
-&CSP_Remarks=
-&CSP_ChargeIndicator=0
-&SUB_C_Mobtel=639175132107
-&SUB_R_Mobtel=639175132107
-&SUB_Device_Details=
-&SUB_DeviceType=
-*/
-
 $SENDSMS = array(
-	'url'            => 'http://203.177.154.215/sam/cpvas',
-	'mo_id'			 => '',					// MO_ID, MANDATORY
-	'parameters'     => array(
-		'CP_Id'				=> 'zed',
-		'CP_UserId'			=> 'zed',
-		'CP_Password'		=> 'zed12345',
-		'CSP_ContentType'	=> 'TM',
-		'SMS_MsgTxt'		=> '',			// MSG, MANDATORY
-		'SMS_Msgdata'		=> '',
-		'SMS_SourceAddr'	=> '28892',
-		'CSP_A_Keyword'		=> 'INFOPULL',
-		'CSP_S_Keyword'		=> 'CHECK',
-		'CSP_Txid'			=> '',			// MOTXID, MANDATORY
-		'CSP_Remarks'       => '',
-		'CSP_ChargeIndicator'	=> '0',
-		'SUB_C_Mobtel'		=> '',			// MSISDN, MANDATORY
-		'SUB_R_Mobtel'		=> '',			// MSISDN, MANDATORY
-		'SUB_Device_Details'	=> '',
-		'SUB_DeviceType'	=> ''
-		)
+	'url'		=> 'http://180.87.143.49/globe/sendsms.php',
+	'mo_id'		=> '',			// MO_ID, MANDATORY
+	'txid'		=>	'',			// TXID, MANDATORY
+	'mobtel'	=>	'',			// MOBTEL, MANDATORY
+	'message'	=>	''			// MESSAGE, MANDATORY
 	);
 
 
@@ -194,32 +160,12 @@ $SENDSMS = array(
 ### CHARGING URL and PARAMETERS
 ### This is for Globe RT Billing service
 
-/*
-http://203.177.154.215/2889ZEDCHARGE?CSP_Txid=12121212
-&CP_Id=zed
-&CP_UserId=zed
-&CP_Password=zed12345
-&SUB_C_Mobtel=639175132107
-&CSP_A_Keyword=CLUBZHELP
-*/
-
-// VALUES FOR GLOBE SILENT BILLING
-$CHG_VALS = array(
-	'250'	=>	'CLUBZHELP',	// Chargecode for P2.50
-	'2000'	=>	'CLUBZHELP'		// Replace with value for P20 chargecode
-	);
-
 $SENDCHARGE = array(
-	'url'	=>	'http://203.177.154.215/2889ZEDCHARGE',
-	'mo_id'	=>	'',							// MO_ID, MANDATORY
-	'parameters' =>	array(
-		'CSP_Txid'		=>	'',				// MOTXID, MANDATORY
-		'CP_Id'			=>	'zed',
-		'CP_UserId'		=>	'zed',
-		'CP_Password'	=>	'zed12345',
-		'SUB_C_Mobtel'	=>	'',				// MSISDN, MANDATORY
-		'CSP_A_Keyword'	=>	''				// CHARGECODE, MANDATORY
-		)
+	'url'		=>	'http://180.87.143.49/globe/sendcharge.php',
+	'mo_id'		=>	'',			// MO_ID, MANDATORY
+	'txid'		=>	'',			// TXID, MANDATORY
+	'mobtel'	=>	'',			// MOBTEL, MANDATORY
+	'charge'	=>	0			// CHARGE AMOUNT, MANDATORY
 	);
 
 
