@@ -2,7 +2,7 @@
 // GRAB Database Login
 
 if (isset($_SERVER["RDS_HOSTNAME"])) {
-	$dbname = 'grab';
+	$dbname = 'globe_grab';
 	$dblink = mysql_connect(
 		$_SERVER["RDS_HOSTNAME"] . ":" . $_SERVER["RDS_PORT"],
 		$_SERVER["RDS_USERNAME"],

@@ -59,66 +59,35 @@ $OUTLA = '28891';
 
 
 ##################################################
-// VIRTUAL HOST DIRECTORY
-// For Unix, OSX, Linux systems
-// $VHROOT = '/Applications/MAMP/htdocs/zed';
-// $BASE_URL = "/zed";
-// For Windows
-$VHROOT = 'C:/wamp/apps/grab';
-$BASE_URL = "/globe";
-
-
-##################################################
-// Log files
-$LOGSROOT = 'C:/wamp/logs/grab';
-$MAIN_LOG = $LOGSROOT . '/grab_' . date( "Ymd" ) . '.log';
-
-
-##################################################
-// Inbound Messages Log
-$IN_LOG = $LOGSROOT . '/grab_mo_' . date ( "Ymd" ) . '.log';
-
-
-##################################################
-// Charging Log
-$CHG_LOG = $LOGSROOT . '/grab_charge_'.date( "Ymd" ).'.log';
-
-
-##################################################
-// Outbound Messages Log
-$OUT_LOG = $LOGSROOT . '/grab_mt_'.date( "Ymd" ) . '.log';
-
-
-##################################################
 // Program host
-$PROG_HOST = 'localhost'; #$_SERVER['SERVER_ADDR'];
-$PROG_PORT = 8888;
-$PROG_BASE = '/grab';
+$PROG_HOST = 'grab.stickr.ph'; #$_SERVER['SERVER_ADDR'];
+$PROG_PORT = 80;
+$PROG_BASE = '/globe';
 
 
 ##################################################
 // KEYWORD URLs
 
 // URL for keyword BAG
-$BAG_PATH = $BASE_URL . "/grab_bag.php";
+$BAG_PATH = $PROG_BASE . "/grab_bag.php";
 
 // URL for keyword REG
-$REG_PATH = $BASE_URL . "/grab_reg.php";
+$REG_PATH = $PROG_BASE . "/grab_reg.php";
 
 // URL for keyword HELP
-$HELP_PATH = $BASE_URL . "/grab_help.php";
+$HELP_PATH = $PROG_BASE . "/grab_help.php";
 
 // URL for keyword TIME
-$TIME_PATH = $BASE_URL . "/grab_time.php";
+$TIME_PATH = $PROG_BASE . "/grab_time.php";
 
 // URL for keyword ON/OFF
-$SUBSCRIBE_PATH = $BASE_URL . "/grab_subscribe.php";
+$SUBSCRIBE_PATH = $PROG_BASE . "/grab_subscribe.php";
 
 // URL for keyword UNLI
-$UNLI_PATH = $BASE_URL . "/grab_unli.php";
+$UNLI_PATH = $PROG_BASE . "/grab_unli.php";
 
 // Default URL
-$DEFAULT_PATH = $BASE_URL . "/grab_main.php";
+$DEFAULT_PATH = $PROG_BASE . "/grab_main.php";
 
 
 ##################################################
@@ -170,5 +139,7 @@ $SENDCHARGE = array(
 
 
 ##################################################
+$PROGRAM_OWNER = '639152481296';
+
 // print "Good";
 ?>

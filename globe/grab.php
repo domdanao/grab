@@ -236,15 +236,17 @@ else {
 // Hit the URL
 $http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $PROG_BASE . $program_path;
 
+print $http_url;
+
 // $full_request = $http_url . "?" . http_build_query( $http_params );
 // print "\n\n$full_request\n";
 
-$rep = hit_http_url( $http_url, $http_params, 'get' );
+// $rep = hit_http_url( $http_url, $http_params, 'get' );
 
-print "Response from ";
-print $rep["url"] . "\n\n" . $rep["body_content"] . "\n\n";
+// print "Response from ";
+// print $rep["url"] . "\n\n" . $rep["body_content"] . "\n\n";
 
-print_r( $rep );
+// print_r( $rep );
 
 
 ##################################################
