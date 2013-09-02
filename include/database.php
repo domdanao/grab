@@ -1,7 +1,7 @@
 <?php
 // GRAB Database Login
 
-if (array_key_exists("RDS_HOSTNAME", $_SERVER) and array_key_exists("RDS_PORT", $_SERVER) and array_key_exists("RDS_DBNAME", $_SERVER)) {
+if (isset($_SERVER["RDS_HOSTNAME"])) {
 	
 	$dblink = mysql_connect(
 		$_SERVER["RDS_HOSTNAME"] . ":" . $_SERVER["RDS_PORT"],
