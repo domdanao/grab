@@ -169,7 +169,7 @@ function hit_http_url( $url, $data, $method = 'post', $timeout = 15 ) {
 	$ch = curl_init();
 	curl_setopt( $ch, CURLOPT_USERAGENT, 'grabber_via_libcurl/06022009' );
 	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
-	curl_setopt( $ch, CURLOPT_HEADER, FALSE );
+	curl_setopt( $ch, CURLOPT_HEADER, TRUE );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 	$ch_info = FALSE;
 	if ( $method == 'get' ) {
