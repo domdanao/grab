@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `grab`
 --
-CREATE DATABASE IF NOT EXISTS `grab` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `grab`;
+CREATE DATABASE IF NOT EXISTS `globe_grab` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `globe_grab`;
 
 -- --------------------------------------------------------
 

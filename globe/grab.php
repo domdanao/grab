@@ -30,6 +30,42 @@ operatorid
 
 
 ##################################################
+// See if all parameters exist
+if 	(	!array_key_exists( 'motxid', $_REQUEST ) or
+		!array_key_exists( 'msisdn', $_REQUEST ) or
+		!array_key_exists( 'message', $_REQUEST ) or
+		!array_key_exists( 'operatorid', $_REQUEST )
+	)
+{
+	$response = array(
+		'response'	=>	'ERROR',
+		'reason'	=>	'One or more parameters missing',
+		'request'	=>	$_REQUEST	
+	);
+	print json_encode( $response, JSON_PRETTY_PRINT );
+	exit();
+}
+
+
+##################################################
+// See if all parameters have value (not empty)
+if 	( 	empty ($_REQUEST['motxid']) or
+		empty ($_REQUEST['msisdn']) or
+		empty ($_REQUEST['message']) or
+		empty ($_REQUEST['operatorid'])
+	)
+{
+	$response = array(
+		'response'	=>	'ERROR',
+		'reason'	=>	'One or more parameters empty',
+		'request'	=>	$_REQUEST	
+	);
+	print json_encode( $response, JSON_PRETTY_PRINT );
+	exit();
+}
+
+
+##################################################
 // Clean up message
 $allwords = preg_replace( '/\s+/', ' ', $_REQUEST['message'] );	// Remove two or more white spaces
 $word_arr = explode( " ", $allwords );
