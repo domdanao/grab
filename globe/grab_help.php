@@ -91,6 +91,7 @@ $response['reason'] = 'OK';
 //$response['message'] = $SENDSMS['parameters']['message'];
 $response['chg_req'] = $chg_req;
 $response['mt_req'] = $mt_req;
+$response['sendsms'] = $SENDSMS;
 
 print json_encode($response, JSON_PRETTY_PRINT);
 
