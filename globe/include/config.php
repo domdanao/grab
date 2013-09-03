@@ -116,10 +116,12 @@ $WELCOME_MSG = "Welcome to GRAB A GADGET PROMO! Participating in GRAB means you 
 
 $SENDSMS = array(
 	'url'		=> 'http://180.87.143.49:8888/globe/sendsms.php',
-	'mo_id'		=> '',			// MO_ID, MANDATORY
-	'txid'		=>	'',			// TXID, MANDATORY
-	'mobtel'	=>	'',			// MOBTEL, MANDATORY
-	'message'	=>	''			// MESSAGE, MANDATORY
+	'parameters'	=> array(
+		'mo_id'		=> '',			// MO_ID, MANDATORY
+		'txid'		=>	'',			// TXID, MANDATORY
+		'mobtel'	=>	'',			// MOBTEL, MANDATORY
+		'message'	=>	''			// MESSAGE, MANDATORY
+		)
 	);
 
 
@@ -130,10 +132,12 @@ $SENDSMS = array(
 
 $SENDCHARGE = array(
 	'url'		=>	'http://180.87.143.49:8888/globe/sendcharge.php',
-	'mo_id'		=>	'',			// MO_ID, MANDATORY
-	'txid'		=>	'',			// TXID, MANDATORY
-	'mobtel'	=>	'',			// MOBTEL, MANDATORY
-	'charge'	=>	0			// CHARGE AMOUNT, MANDATORY
+	'parameters'		=>	array(
+		'mo_id'		=>	'',			// MO_ID, MANDATORY
+		'txid'		=>	'',			// TXID, MANDATORY
+		'mobtel'	=>	'',			// MOBTEL, MANDATORY
+		'charge'	=>	0			// CHARGE AMOUNT, MANDATORY
+		)
 	);
 
 

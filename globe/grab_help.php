@@ -25,9 +25,9 @@ $do_charge = FALSE;
 
 ##################################################
 // HTTP Request Variables
-$SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['parameters']['mo_id'] = $mo_id = $_REQUEST['mo_id'];
+$SENDSMS['parameters']['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['parameters']['txid'] = $tran_id = $_REQUEST['tran_id'];
 $smsc_time = $_REQUEST['smsc_time'];
 $main_key = $_REQUEST['keyword'];
 
@@ -49,7 +49,7 @@ $response = array(
 
 ##################################################
 // The HELP file
-$SENDSMS['parameters']['SMS_MsgTxt'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n" .
+$SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n" .
 	"GRAB REG name/age/address – to be a member and buy items for P88 only\n" .
 	"GRAB UNLI - get 24hrs unlimited grabs [P20/day]\n" .
 	"GRAB <item> - grab an item\n" .
@@ -63,14 +63,12 @@ $SENDSMS['parameters']['SMS_MsgTxt'] = "Welcome to GRAB A GADGET PROMO! Availabl
 ##################################################
 // Finish the program
 
-$SENDSMS['message'] = $msg;
-
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
-	$SENDCHARGE['mo_id']	=	$mo_id;
-	$SENDCHARGE['txid']		=	$tran_id;
-	$SENDCHARGE['mobtel']	=	$sender;
-	$SENDCHARGE['charge']	=	$charge_val;
+	$SENDCHARGE['parameters']['mo_id']	=	$mo_id;
+	$SENDCHARGE['parameters']['txid']	=	$tran_id;
+	$SENDCHARGE['parameters']['mobtel']	=	$sender;
+	$SENDCHARGE['parameters']['charge']	=	$charge_val;
 	// Send charge request
 	if ( charge_request( $SENDCHARGE ) ) {
 		// Send the SMS
@@ -87,7 +85,7 @@ if ( $do_charge ) {
 // If we reached here, we're cool, so send response
 $response['response'] = 'OK';
 $response['reason'] = 'OK';
-$response['message'] = $msg;
+$response['message'] = $SENDSMS['parameters']['message'];
 
 print json_encode($response, JSON_PRETTY_PRINT);
 

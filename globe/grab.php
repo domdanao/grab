@@ -188,10 +188,10 @@ if ( mysql_affected_rows() == -1 ) {
 ##################################################
 // First time to send?
 if ( first_send( $mo_from, $dblink ) === FALSE ) {
-	$SENDSMS['mo_id'] = $mo_id;
-	$SENDSMS['txid'] = $_REQUEST['motxid'];
-	$SENDSMS['message'] = $WELCOME_MSG;
-	$SENDSMS['mobtel'] = $mo_from;
+	$SENDSMS['parameters']['mo_id'] = $mo_id;
+	$SENDSMS['parameters']['txid'] = $_REQUEST['motxid'];
+	$SENDSMS['parameters']['message'] = $WELCOME_MSG;
+	$SENDSMS['parameters']['mobtel'] = $mo_from;
 	// Send the welcome message
 	sms_mt_request( $SENDSMS );
 }

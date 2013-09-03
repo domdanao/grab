@@ -332,10 +332,10 @@ function charge_request( $sendcharge ) {
 	global $dblink;
 	// Check for mo_id and other mandatory parameters for charging
 	if	(
-		empty( $sendcharge['mo_id'] ) or
-		empty( $sendcharge['txid'] ) or
-		empty( $sendcharge['mobtel'] ) or
-		empty( $sendcharge['charge'] )
+		empty( $sendcharge['parameters']['mo_id'] ) or
+		empty( $sendcharge['parameters']['txid'] ) or
+		empty( $sendcharge['parameters']['mobtel'] ) or
+		empty( $sendcharge['parameters']['charge'] )
 		)
 		{
 		return FALSE;
@@ -378,10 +378,10 @@ function charge_request( $sendcharge ) {
 function sms_mt_request( $sendsms ) {
 	global $dblink;
 	if	(
-		empty( $sendsms['mo_id'] ) or
-		empty( $sendsms['message'] ) or
-		empty( $sendsms['txid'] ) or
-		empty( $sendsms['mobtel'] ) 
+		empty( $sendsms['parameters']['mo_id'] ) or
+		empty( $sendsms['parameters']['message'] ) or
+		empty( $sendsms['parameters']['txid'] ) or
+		empty( $sendsms['parameters']['mobtel'] ) 
 		)
 		{
 		return FALSE;
