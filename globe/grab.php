@@ -277,18 +277,14 @@ $response['http_url'] = $http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . 
 //$response['query'] = $query;
 $response['http_params'] = $http_params;
 
-print json_encode( $response, JSON_PRETTY_PRINT );
-print "\n\n------------------------------\n\n";
-
 $rep = hit_http_url( $http_url, $http_params, 'get' );
-$output = array(
-	'url'			=>	$rep['url'],
+$response = array(
 	'http_code'		=>	$rep['http_code'],
 	'total_time'	=>	$rep['total_time'],
 	'body_content'	=>	$rep['body_content']
 );
 
-print json_encode( $output, JSON_PRETTY_PRINT );
+print json_encode( $response, JSON_PRETTY_PRINT );
 
 
 ##################################################
