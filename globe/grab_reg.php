@@ -56,6 +56,7 @@ if ( $reg = is_registered( $sender ) ) {
 	$SENDSMS['parameters']['message'] = $msg;
 	// Send message
 	sms_mt_request( $SENDSMS );
+	// Compose and print reply to request
 	$response['response'] = 'NOK';
 	$response['reason'] = 'Already registered.'; 
 	$response['message'] = $msg;
@@ -76,6 +77,7 @@ if ( $others ) {
 		$SENDSMS['parameters']['message'] = $msg;
 		// Send message
 		sms_mt_request( $SENDSMS );
+		// Compose and print reply to request
 		$response['response'] = 'NOK';
 		$response['reason'] = 'Invalid format'; 
 		$response['message'] = $msg;
@@ -95,11 +97,12 @@ if ( $others ) {
 		$msg = "GRAB: Sorry, incomplete ang registration mo. I-check mabuti ang format.Text GRAB REG <name/age/address> send to $INLA for free. For more info, txt HELP GRAB to $INLA. $BP1";
 		$SENDSMS['parameters']['message'] = $msg;
 		// Send message
+		sms_mt_request( $SENDSMS );
+		// Compose and print reply to request
 		$response['response'] = 'NOK';
 		$response['reason'] = 'Parameters missing'; 
 		$response['message'] = $msg;
 		print json_encode( $response, JSON_PRETTY_PRINT );
-		sms_mt_request( $SENDSMS );
 		exit();
 	}
 
@@ -118,22 +121,24 @@ if ( $others ) {
 		$msg = "Member ka na ng GRAB A GADGET PROMO! Start grabbing cool items that u may buy for P88 only! $BP2\n\nFor more info, txt HELP GRAB to $INLA.\n\nThis msg is free.";
 		$SENDSMS['parameters']['message'] = $msg;
 		// Send message
+		sms_mt_request( $SENDSMS );
+		// Compose and print reply to request
 		$response['response'] = 'OK';
 		$response['reason'] = 'Successful registration'; 
 		$response['message'] = $msg;
 		print json_encode( $response, JSON_PRETTY_PRINT );
-		sms_mt_request( $SENDSMS );
 	}
 } else {
 	// Just sent GRAB REG
 	$msg = "GRAB: Sorry, incomplete ang registration mo. I-check mabuti ang format.Text GRAB REG <name/age/address> send to $INLA for free. For more info, txt HELP GRAB to $INLA. $BP1";
 	$SENDSMS['parameters']['message'] = $msg;
 	// Send message
+	sms_mt_request( $SENDSMS );
+	// Compose and print reply to request
 	$response['response'] = 'NOK';
 	$response['reason'] = 'Parameters missing'; 
 	$response['message'] = $msg;
 	print json_encode( $response, JSON_PRETTY_PRINT );
-	sms_mt_request( $SENDSMS );
 }
 
 exit();
