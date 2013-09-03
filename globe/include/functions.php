@@ -346,7 +346,7 @@ function charge_request( $sendcharge ) {
 		$http_end_time = microtime( TRUE );
 
 		$sendcharge_result = array(
-			'mo_id'			=> $sendcharge['mo_id'],
+			'mo_id'			=> $sendcharge['parameters']['mo_id'],
 			'req_type'		=> 'GET',
 			'url'			=> $charge_it['url'],
 			'time_start'	=> $http_start_time,
@@ -393,7 +393,7 @@ function sms_mt_request( $sendsms ) {
 		$http_end_time = microtime( TRUE );
 
 		$sendsms_result = array(
-			'mo_id'			=> $sendsms['mo_id'],
+			'mo_id'			=> $sendsms['parameters']['mo_id'],
 			'req_type'		=> 'GET',
 			'url'			=> $sms_it['url'],
 			'time_start'	=> $http_start_time,
