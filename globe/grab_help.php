@@ -20,7 +20,7 @@ $charge_val = 250;
 
 ##################################################
 // DEFAULT CHARGING BEHAVIOR (PROD: TRUE)
-$do_charge = FALSE;
+$do_charge = TRUE;
 
 
 ##################################################
