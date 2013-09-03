@@ -100,12 +100,6 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 	if ( $has_reached_total_grabs_allowed ) {
 		$message = "GRAB: You've reached the maximum number of grabs for this item (" . strtoupper( $param ) . "). You cannot grab the item any longer.";
 	} else {
-		/*
-		$message = "GRAB:\nNatanggap namin ang Grab attempt mo. Pls wait for confirmation that you've grabbed the item (" . strtoupper($param) . "). $BP1 $REGMSG";
-		$SENDSMS['parameters']['SMS_MsgTxt'] = $message;
-		sms_mt_request( $SENDSMS );
-		*/
-
 		$CHARGE_IT = FALSE;
 		
 		if ( $an_unli_sub == FALSE ) {
@@ -133,12 +127,13 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 			$row = mysql_fetch_assoc( $res );
 			$bilang = $row['bilang'];
 
+			// There are rows in the grab_action_table
 			if ( $bilang ) {
-				// Is he the current holder?
+				// Let's find out who is the holder
 				$query = "SELECT * FROM `$grab_action_table` ORDER BY `grab_id` DESC LIMIT 1";
 				$result = mysql_query( $query );
 				$row = array();
-				$cur_msisdn = '';
+				$cur_msisdn = ''; # Variable for current holder's msisdn
 
 				if ( mysql_num_rows( $result ) ) {
 					$row = mysql_fetch_assoc($result);
@@ -188,9 +183,11 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['mo_id'] = $mo_id;
 						sms_mt_request( $SENDSMS_FOR_PREVIOUS_HOLDER );
 					}
+				}
 				
 			} else {
-				
+			
+				// Table is not yet populated with grabs, so populate it now
 				$insert = "INSERT INTO `" . $grab_action_table . "` ( `msisdn`, `grab_time` ) VALUES ( '$sender', $charge_time )";
 				$insert_result = mysql_query( $insert );
 
@@ -204,12 +201,14 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 			$message = "GRAB: Sorry, you do not have enough balance or not subscribed UNLIGRAB.";
 			
 		}
-
-	}
 	
+	}
+
 } else {
+	
 	// There is no such item in the Grab Bag
 	$message = "GRAB: Sorry, walang ganyang item (" . strtoupper( $param ) . ") sa Grab Bag ngayon.\nText GRAB BAG to $INLA para makita mo kung ano laman ng Grab Bag. $BP1";
+
 }
 
 $SENDSMS['parameters']['message'] = $message;

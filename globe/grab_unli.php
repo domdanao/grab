@@ -20,10 +20,9 @@ require_once 'include/config.php';
 ##################################################
 // HTTP Request Variables
 
-$SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['parameters']['SUB_C_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['SUB_R_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['CSP_Txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['parameters']['mo_id'] = $mo_id = $_REQUEST['mo_id'];
+$SENDSMS['parameters']['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['parameters']['txid'] = $tran_id = $_REQUEST['tran_id'];
 $main_key = $_REQUEST['keyword'];
 $param = strtolower( $_REQUEST['param'] );
 $others = trim( $_REQUEST['others'] );
@@ -52,9 +51,9 @@ $do_charge = TRUE;
 ##################################################
 // Charging
 $SENDCHARGE['mo_id'] = $_REQUEST['mo_id'];
-$SENDCHARGE['parameters']['CSP_Txid'] = $tran_id;
-$SENDCHARGE['parameters']['SUB_C_Mobtel'] = $sender;
-$SENDCHARGE['parameters']['CSP_A_Keyword'] = $CHG_VALS[$val];	// This statement makes default charge 2.50
+$SENDCHARGE['parameters']['txid'] = $tran_id;
+$SENDCHARGE['parameters']['mobtel'] = $sender;
+$SENDCHARGE['parameters']['charge'] = $val;
 
 
 ##################################################
@@ -163,7 +162,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 
 ##################################################
 // Send the SMS MT
-$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+$SENDSMS['parameters']['message'] = $msg;
 sms_mt_request( $SENDSMS );
 
 
