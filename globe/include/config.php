@@ -61,7 +61,7 @@ $OUTLA = '28891';
 // Program host
 $PROG_HOST = 'grab.stickr.ph'; #$_SERVER['SERVER_ADDR'];
 $PROG_PORT = 80;
-$PROG_BASE = '';
+$PROG_BASE = '/globe';
 
 
 ##################################################
