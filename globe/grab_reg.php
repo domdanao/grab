@@ -93,7 +93,7 @@ if ( $others ) {
 	$address = trim( $parts[2] );
 
 	// If one of the variables is empty
-	if ( !$name or !$age or !$address ) {
+	if ( !$name or !$age or !$address or !is_int($age) ) {
 		$msg = "GRAB: Sorry, incomplete ang registration mo. I-check mabuti ang format.Text GRAB REG <name/age/address> send to $INLA for free. For more info, txt HELP GRAB to $INLA. $BP1";
 		$SENDSMS['parameters']['message'] = $msg;
 		// Send message
