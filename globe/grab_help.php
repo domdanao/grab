@@ -82,6 +82,13 @@ if ( $do_charge ) {
 	sms_mt_request( $SENDSMS );
 }
 
+
+##################################################
+// If we reached here, we're cool, so send response
+$response['response'] = 'OK';
+$response['reason'] = 'OK';
+$response['message'] = $msg;
+
 print json_encode($response, JSON_PRETTY_PRINT);
 
 exit();
