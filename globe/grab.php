@@ -270,7 +270,7 @@ else {
 
 ##################################################
 // Hit the URL
-$http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $PROG_BASE . $program_path;
+$http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $program_path;
 
 print $http_url;
 
