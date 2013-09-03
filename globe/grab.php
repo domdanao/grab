@@ -174,10 +174,10 @@ $result = mysql_query( $query );
 // Now let us see what happened to our MySQL query
 if ( mysql_affected_rows() == -1 ) {
 	// Notify program owner
-	$SENDSMS['mo_id'] = 0;
-	$SENDSMS['txid'] = $_REQUEST['motxid'];
-	$SENDSMS['mobtel'] = $PROGRAM_OWNER;
-	$SENDSMS['message'] = 'ERROR:globe/grab.php:fail_insert:query:'. $query;
+	$SENDSMS['parameters']['mo_id'] = 0;
+	$SENDSMS['parameters']['txid'] = $_REQUEST['motxid'];
+	$SENDSMS['parameters']['mobtel'] = $PROGRAM_OWNER;
+	$SENDSMS['parameters']['message'] = 'ERROR:globe/grab.php:fail_insert:query:'. $query;
 	hit_http_url($SENDSMS['url'], $SENDSMS['data'], 'get');
 	exit();
 } else {
