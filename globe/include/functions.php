@@ -315,7 +315,7 @@ function http_req_rep( $data ) {
 		total_time = " . $data['total_time'] . ",
 		body_content = '" . mysql_real_escape_string( $data['body_content'] ) . "',
 		trans_type = '" . $data['trans_type'] . "'";
-	// print "\n\n\nQUERY: $query \n\n\n";
+	print "\n\n\nQUERY: $query \n\n\n";
 	$result = mysql_query( $query );
 	if (mysql_affected_rows() == -1) {
 		// print "MySQL said: " . mysql_error() . "\n\n";
