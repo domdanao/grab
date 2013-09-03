@@ -26,9 +26,9 @@ $do_charge = FALSE;
 
 ##################################################
 // HTTP Request Variables
-$SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['parameters']['mo_id'] = $mo_id = $_REQUEST['mo_id'];
+$SENDSMS['parameters']['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['parameters']['txid'] = $tran_id = $_REQUEST['tran_id'];
 $timestamp = $_REQUEST['smsc_time'];
 $main_key = $_REQUEST['keyword'];
 $others = trim( $_REQUEST['others'] );
@@ -41,7 +41,7 @@ $msg = '';
 // Free message
 if ( $reg = is_registered( $sender ) ) {
 	$msg = "Registered ka na sa GRAB A GADGET Promo. No need to register again. I-grab mo na ang cool item ngayon for 88 pesos only! Txt GRAB BAG to $INLA para makita ang items up for grab! For more info, txt GRAB HELP to $INLA. $BP1";
-	$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+	$SENDSMS['parameters']['message'] = $msg;
 	// Send message
 	sms_mt_request( $SENDSMS );
 	exit();
@@ -57,7 +57,7 @@ if ( $others ) {
 		// Must always have 3 parts
 		// Valid pattern: MARK SY/25/8 Apo St, QC
 		$msg = "GRAB: Sorry, incomplete ang registration mo. I-check mabuti ang format.Text GRAB REG <name/age/address> send to $INLA for free. For more info, txt HELP GRAB to $INLA. $BP1";
-		$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+		$SENDSMS['parameters']['message'] = $msg;
 		// Send message
 		sms_mt_request( $SENDSMS );
 		exit();
@@ -73,7 +73,7 @@ if ( $others ) {
 	// If one of the variables is empty
 	if ( !$name or !$age or !$address ) {
 		$msg = "GRAB: Sorry, incomplete ang registration mo. I-check mabuti ang format.Text GRAB REG <name/age/address> send to $INLA for free. For more info, txt HELP GRAB to $INLA. $BP1";
-		$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+		$SENDSMS['parameters']['message'] = $msg;
 		// Send message
 		sms_mt_request( $SENDSMS );
 		exit();
@@ -92,14 +92,14 @@ if ( $others ) {
 	if ( mysql_affected_rows() !== -1 ) {
 		// Success
 		$msg = "Member ka na ng GRAB A GADGET PROMO! Start grabbing cool items that u may buy for P88 only! $BP2\n\nFor more info, txt HELP GRAB to $INLA.\n\nThis msg is free.";
-		$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+		$SENDSMS['parameters']['message'] = $msg;
 		// Send message
 		sms_mt_request( $SENDSMS );
 	}
 } else {
 	// Just sent GRAB REG
 	$msg = "GRAB: Sorry, incomplete ang registration mo. I-check mabuti ang format.Text GRAB REG <name/age/address> send to $INLA for free. For more info, txt HELP GRAB to $INLA. $BP1";
-	$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+	$SENDSMS['parameters']['message'] = $msg;
 	// Send message
 	sms_mt_request( $SENDSMS );
 }
