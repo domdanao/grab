@@ -169,7 +169,7 @@ function hit_http_url( $url, $data, $method = 'post', $timeout = 15 ) {
 	$ch = curl_init();
 	curl_setopt( $ch, CURLOPT_USERAGENT, 'grabber_via_libcurl/06022009' );
 	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
-	curl_setopt( $ch, CURLOPT_HEADER, TRUE );
+	curl_setopt( $ch, CURLOPT_HEADER, FALSE );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 	$ch_info = FALSE;
 	if ( $method == 'get' ) {
@@ -315,7 +315,7 @@ function http_req_rep( $data ) {
 		total_time = " . $data['total_time'] . ",
 		body_content = '" . mysql_real_escape_string( $data['body_content'] ) . "',
 		trans_type = '" . $data['trans_type'] . "'";
-	print "\n\n\nQUERY: $query \n\n\n";
+	//print "\n\n\nQUERY: $query \n\n\n";
 	$result = mysql_query( $query );
 	if (mysql_affected_rows() == -1) {
 		// print "MySQL said: " . mysql_error() . "\n\n";

@@ -63,6 +63,9 @@ $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available c
 ##################################################
 // Finish the program
 
+$chg_req = array();
+$mt_req = array();
+
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
 	$SENDCHARGE['parameters']['mo_id']	=	$mo_id;
@@ -85,7 +88,9 @@ if ( $do_charge ) {
 // If we reached here, we're cool, so send response
 $response['response'] = 'OK';
 $response['reason'] = 'OK';
-$response['message'] = $SENDSMS['parameters']['message'];
+//$response['message'] = $SENDSMS['parameters']['message'];
+$response['chg_req'] = $chg_req;
+$response['mt_req'] = $mt_req;
 
 print json_encode($response, JSON_PRETTY_PRINT);
 
