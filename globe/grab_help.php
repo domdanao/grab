@@ -49,7 +49,8 @@ $response = array(
 
 ##################################################
 // The HELP file
-$SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n" .
+$SENDSMS['parameters']['message'] = "Welcome! It's more fun in the Philippines.";
+/*"Welcome to GRAB A GADGET PROMO! Available commands:\n" .
 	"GRAB REG name/age/address – to be a member and buy items for P88 only\n" .
 	"GRAB UNLI - get 24hrs unlimited grabs [P20/day]\n" .
 	"GRAB <item> - grab an item\n" .
@@ -57,7 +58,7 @@ $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available c
 	"ON GRAB - to subscribe to daily updates\n" .
 	"GRAB TIME <item>  - know how much time u are holding the item\n" .
 	"DTI XXXX Promo Pd 08/26/13-09/25/13\nCall 7065278 $BP1" .
-	$REGMSG;
+	$REGMSG;*/
 
 
 ##################################################
