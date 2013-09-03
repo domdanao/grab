@@ -73,14 +73,14 @@ if ( $do_charge ) {
 	$SENDCHARGE['parameters']['mobtel']	=	$sender;
 	$SENDCHARGE['parameters']['charge']	=	$charge_val;
 	// Send charge request
-	if ( charge_request( $SENDCHARGE ) ) {
+	if ( $chg_req = charge_request( $SENDCHARGE ) ) {
 		// Send the SMS
-		sms_mt_request( $SENDSMS );
+		$mt_req = sms_mt_request( $SENDSMS );
 	}
 } else {
 	// No charging necessary, just send the SMS
 	$response['charge'] = 0;
-	sms_mt_request( $SENDSMS );
+	$mt_req = sms_mt_request( $SENDSMS );
 }
 
 
