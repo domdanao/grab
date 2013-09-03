@@ -57,7 +57,7 @@ $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available c
 	"ON GRAB - to subscribe to daily updates\n" .
 	"GRAB TIME <item>  - know how much time u are holding the item\n" .
 	"DTI XXXX Promo Pd 08/26/13-09/25/13\nCall 7065278 $BP1" .
-	$REGMSG;*/
+	$REGMSG;
 
 
 ##################################################
