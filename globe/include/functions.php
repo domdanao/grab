@@ -384,7 +384,8 @@ function sms_mt_request( $sendsms ) {
 		empty( $sendsms['parameters']['mobtel'] ) 
 		)
 		{
-		return FALSE;
+		return "PARAMETER/S EMPTY!";
+		#return FALSE;
 	} else {
 		// Proceed with SMS MT request
 		$http_start_time = microtime( TRUE );
@@ -408,12 +409,14 @@ function sms_mt_request( $sendsms ) {
 				return $sendsms_result;
 			} else {
 				// Server return some 4xx error code
-				return FALSE;
+				return "DID NOT RECEIVE 200 FROM SERVER!";
+				#return FALSE;
 			}
 		} else {
 			// Function http_req_rep failed
 			// Log this
-			return FALSE;
+			return "HTTP_REQ_REP FAIL!";
+			#return FALSE;
 		}
 	}
 }
