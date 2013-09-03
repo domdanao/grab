@@ -44,6 +44,7 @@ $response = array(
 	'reason'	=>	'',
 	'message'	=>	'',
 	'charge'	=>	0,
+	'request'	=>	$_REQUEST
 );
 
 

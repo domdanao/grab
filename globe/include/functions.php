@@ -35,7 +35,7 @@ function is_registered( $msisdn ) {
 
 
 ##################################################
-// Check if sub has unlimiteeed subscription
+// Check if sub has unlimited subscription
 function is_unlisub( $msisdn ) {
 	global $dblink;
 	$timenow = date( "Y-m-d H:i:s" );

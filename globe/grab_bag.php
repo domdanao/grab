@@ -23,9 +23,9 @@ $do_charge = FALSE;
 
 ##################################################
 // HTTP Request Variables
-$SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['parameters']['mo_id'] = $mo_id = $_REQUEST['mo_id'];
+$SENDSMS['parameters']['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['parameters']['txid'] = $tran_id = $_REQUEST['tran_id'];
 $main_key = $_REQUEST['keyword'];
 $param = $_REQUEST['param'];
 $others = trim( $_REQUEST['others'] );
@@ -124,7 +124,7 @@ $response['response'] = 'OK';
 $response['reason'] = 'OK';
 $response['message'] = $msg;
 
-print json_encode($response, JSON_PRETTY_PRINT);
+print json_encode( $response, JSON_PRETTY_PRINT );
 
 exit();
 

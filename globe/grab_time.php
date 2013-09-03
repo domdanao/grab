@@ -16,10 +16,9 @@ require_once 'include/config.php';
 ##################################################
 // HTTP Request Variables
 
-$SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['parameters']['SUB_C_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['SUB_R_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['CSP_Txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['parameters']['mo_id'] = $mo_id = $_REQUEST['mo_id'];
+$SENDSMS['parameters']['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['parameters']['txid'] = $tran_id = $_REQUEST['tran_id'];
 $main_key = $_REQUEST['keyword'];
 $param = strtolower( $_REQUEST['param'] );
 $others = trim( $_REQUEST['others'] );
@@ -42,7 +41,18 @@ $msg = '';
 ##################################################
 // DEFAULT CHARGING BEHAVIOR
 $do_charge = TRUE;
+$charge_val = 250;
 
+
+##################################################
+// INITIALIZE RESPONSE
+$response = array(
+	'response'	=>	'',
+	'reason'	=>	'',
+	'message'	=>	'',
+	'charge'	=>	$charge_val,
+	'request'	=>	$_REQUEST
+);
 
 ##################################################
 // Check the currently running grab games
@@ -92,26 +102,33 @@ if ( $num = count( $running ) ) {
 ##################################################
 // Finish the program, charge/send, or send only
 
-$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+$SENDSMS['parameters']['message'] = $msg;
 
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
-	$SENDCHARGE['mo_id'] = $mo_id;
-	$SENDCHARGE['parameters']['CSP_Txid'] = $tran_id;
-	$SENDCHARGE['parameters']['SUB_C_Mobtel'] = $sender;
-	$SENDCHARGE['parameters']['CSP_A_Keyword'] = $CHG_VALS['250'];
+	$SENDCHARGE['parameters']['mo_id'] = $mo_id;
+	$SENDCHARGE['parameters']['txid'] = $tran_id;
+	$SENDCHARGE['parameters']['mobtel'] = $sender;
+	$SENDCHARGE['parameters']['charge'] = $charge_val;
 
 	// Send charge request
 	if ( charge_request( $SENDCHARGE ) ) {
 		// Send the SMS
+		$response['response'] = 'OK';
+		$response['reason'] = 'Charge success';
+		$response['message'] = $msg;
+		$response['charge'] = $charge_val;
 		sms_mt_request( $SENDSMS );
 	}
 } else {
 	// No charging necessary, just send the SMS
+	$response['response'] = 'OK';
+	$response['reason'] = 'OK';
+	$response['message'] = $msg;
+	$response['charge'] = 0;
 	sms_mt_request( $SENDSMS );
 }
 
-print "\n\n\n$msg\n\n\n";
-
+print json_encode($response, JSON_PRETTY_PRINT);
 exit();
 ?>
