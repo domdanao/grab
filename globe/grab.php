@@ -274,7 +274,7 @@ else {
 ##################################################
 // Hit the URL
 $response['http_url'] = $http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $program_path;
-$response['query'] = $query;
+//$response['query'] = $query;
 $response['http_params'] = $http_params;
 
 print json_encode( $response, JSON_PRETTY_PRINT );
