@@ -10,7 +10,7 @@ if (isset($_SERVER["RDS_HOSTNAME"])) {
 		or
 		die ("ERROR:" . mysql_error());
 	mysql_select_db($dbname);
-	print "CONNECTED REMOTE: $dbname <>" . $_SERVER["RDS_DB_NAME"];
+	// print "CONNECTED REMOTE: $dbname <>" . $_SERVER["RDS_DB_NAME"];
 
 } else {
 
@@ -22,6 +22,6 @@ if (isset($_SERVER["RDS_HOSTNAME"])) {
 		die( "ERROR: " . mysql_error() );
 
 	mysql_select_db( 'grab' );	
-	print "CONNECTED LOCAL";
+	// print "CONNECTED LOCAL";
 }
 ?>
