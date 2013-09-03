@@ -280,9 +280,9 @@ $response['http_params'] = $http_params;
 print json_encode( $response, JSON_PRETTY_PRINT );
 print "\n\n------------------------------\n\n";
 
-//$rep = hit_http_url( $http_url, $http_params, 'get' );
+$rep = hit_http_url( $http_url, $http_params, 'get' );
 
-//print json_encode( $rep, JSON_PRETTY_PRINT );
+print json_encode( $rep, JSON_PRETTY_PRINT );
 
 
 ##################################################
