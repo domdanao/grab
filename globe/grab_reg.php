@@ -15,11 +15,20 @@ require_once 'include/config.php';
 
 
 ##################################################
+// Charge amount, Php2.50, expressed in centavos
+$charge_val = 250;
+
+
+##################################################
+// DEFAULT CHARGING BEHAVIOR (PROD: FALSE)
+$do_charge = FALSE;
+
+
+##################################################
 // HTTP Request Variables
 $SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['parameters']['SUB_C_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['SUB_R_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['CSP_Txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['txid'] = $tran_id = $_REQUEST['tran_id'];
 $timestamp = $_REQUEST['smsc_time'];
 $main_key = $_REQUEST['keyword'];
 $others = trim( $_REQUEST['others'] );

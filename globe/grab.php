@@ -270,19 +270,15 @@ else {
 
 ##################################################
 // Hit the URL
-$http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $program_path;
+$response['http_url'] = $http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $program_path;
+$response['http_params'] = $http_params;
 
-print $http_url;
+print json_encode( $response, JSON_PRETTY_PRINT );
+print "\n\n------------------------------\n\n";
 
-// $full_request = $http_url . "?" . http_build_query( $http_params );
-// print "\n\n$full_request\n";
+//$rep = hit_http_url( $http_url, $http_params, 'get' );
 
-// $rep = hit_http_url( $http_url, $http_params, 'get' );
-
-// print "Response from ";
-// print $rep["url"] . "\n\n" . $rep["body_content"] . "\n\n";
-
-// print_r( $rep );
+//print json_encode( $rep, JSON_PRETTY_PRINT );
 
 
 ##################################################

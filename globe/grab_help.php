@@ -4,8 +4,6 @@
 // GRAB HELP
 // Charge: 2.50
 
-// AS OF August 21, 2013
-
 
 // Just to be safe, if not via Globe, exit
 if ( $_REQUEST['operator'] !== 'GLOBE' ) {
@@ -14,12 +12,22 @@ if ( $_REQUEST['operator'] !== 'GLOBE' ) {
 
 require_once 'include/config.php';
 
+
+##################################################
+// Charge amount, Php2.50, expressed in centavos
+$charge_val = 250;
+
+
+##################################################
+// DEFAULT CHARGING BEHAVIOR (PROD: TRUE)
+$do_charge = FALSE;
+
+
 ##################################################
 // HTTP Request Variables
 $SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['parameters']['SUB_C_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['SUB_R_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['CSP_Txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['txid'] = $tran_id = $_REQUEST['tran_id'];
 $smsc_time = $_REQUEST['smsc_time'];
 $main_key = $_REQUEST['keyword'];
 
@@ -28,6 +36,15 @@ $REGMSG = '';
 if ( !is_registered( $sender ) ) {
 	$REGMSG = $NOT_REG;
 }
+
+##################################################
+// INITIALIZE RESPONSE
+$response = array(
+	'response'	=>	0,
+	'reason'	=>	'',
+	'message'	=>	'',
+	'charge'	=>	0,
+);
 
 
 ##################################################
@@ -44,17 +61,28 @@ $SENDSMS['parameters']['SMS_MsgTxt'] = "Welcome to GRAB A GADGET PROMO! Availabl
 
 
 ##################################################
-// Set up charging (mandatory variables)
-$SENDCHARGE['mo_id'] = $mo_id;
-$SENDCHARGE['parameters']['CSP_Txid'] = $tran_id;
-$SENDCHARGE['parameters']['SUB_C_Mobtel'] = $sender;
-$SENDCHARGE['parameters']['CSP_A_Keyword'] = $CHG_VALS['250'];
+// Finish the program
 
-// Send charge request
-if ( charge_request( $SENDCHARGE ) ) {
-	// Send the SMS
+$SENDSMS['message'] = $msg;
+
+if ( $do_charge ) {
+	// Set up charging (mandatory variables)
+	$SENDCHARGE['mo_id']	=	$mo_id;
+	$SENDCHARGE['txid']		=	$tran_id;
+	$SENDCHARGE['mobtel']	=	$sender;
+	$SENDCHARGE['charge']	=	$charge_val;
+	// Send charge request
+	if ( charge_request( $SENDCHARGE ) ) {
+		// Send the SMS
+		sms_mt_request( $SENDSMS );
+	}
+} else {
+	// No charging necessary, just send the SMS
+	$response['charge'] = 0;
 	sms_mt_request( $SENDSMS );
 }
+
+print json_encode($response, JSON_PRETTY_PRINT);
 
 exit();
 

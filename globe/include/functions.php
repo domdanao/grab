@@ -164,14 +164,6 @@ function duration_out( $array ) {
 
 
 ##################################################
-function MakeDirectory($dir, $mode = 0755) {
-	if ( is_dir( $dir ) || @mkdir( $dir, $mode ) ) return TRUE;
-	if ( !MakeDirectory( dirname( $dir ), $mode ) ) return FALSE;
-	return @mkdir( $dir, $mode );
-}
-
-
-##################################################
 // Access HTTP URL
 function hit_http_url( $url, $data, $method = 'post', $timeout = 15 ) {
 	$ch = curl_init();
@@ -326,7 +318,7 @@ function http_req_rep( $data ) {
 	// print "\n\n\nQUERY: $query \n\n\n";
 	$result = mysql_query( $query );
 	if (mysql_affected_rows() == -1) {
-		print "MySQL said: " . mysql_error() . "\n\n";
+		// print "MySQL said: " . mysql_error() . "\n\n";
 		return FALSE;
 	} else {
 		return mysql_insert_id();
@@ -341,8 +333,9 @@ function charge_request( $sendcharge ) {
 	// Check for mo_id and other mandatory parameters for charging
 	if	(
 		empty( $sendcharge['mo_id'] ) or
-		empty( $sendcharge['parameters']['CSP_Txid'] ) or
-		empty( $sendcharge['parameters']['SUB_C_Mobtel'] )
+		empty( $sendcharge['txid'] ) or
+		empty( $sendcharge['mobtel'] ) or
+		empty( $sendcharge['charge'] )
 		)
 		{
 		return FALSE;
@@ -386,10 +379,9 @@ function sms_mt_request( $sendsms ) {
 	global $dblink;
 	if	(
 		empty( $sendsms['mo_id'] ) or
-		empty( $sendsms['parameters']['SMS_MsgTxt'] ) or
-		empty( $sendsms['parameters']['CSP_Txid'] ) or
-		empty( $sendsms['parameters']['SUB_C_Mobtel'] ) or
-		empty( $sendsms['parameters']['SUB_R_Mobtel'] )
+		empty( $sendsms['message'] ) or
+		empty( $sendsms['txid'] ) or
+		empty( $sendsms['mobtel'] ) 
 		)
 		{
 		return FALSE;
@@ -428,33 +420,4 @@ function sms_mt_request( $sendsms ) {
 
 
 ##################################################
-//Logging
-function write2log ( $file, $text ) {
-	if ( !file_exists( $file ) ) {
-		touch( $file );
-	}
-	$lh = fopen( $file, 'a' );
-	flock( $lh,LOCK_EX );
-	fwrite( $lh, $text );
-	flock( $lh,LOCK_UN );
-	fclose( $lh );
-}
-
-
-##################################################
-// Format of the MSISDN is 09xxxxxxxxx
-function normalize_msisdn( $msisdn ) {
-	if ( preg_match( "/^09[0-9]{2}[0-9]{7}$/", $msisdn ) ) {
-		return $msisdn;
-	} else {
-		$msisdn = preg_replace( "/^\+/", "", $msisdn );	# strip plus sign
-		$msisdn = preg_replace( "/^00/", "", $msisdn );	# strip double zero (00639xxyyyyyyy)
-		$msisdn = preg_replace( "/^63/", "0", $msisdn ); # replace starting 63 with 0
-		return $msisdn;
-	}
-}
-
-
-##################################################
-// print "Good";
 ?>

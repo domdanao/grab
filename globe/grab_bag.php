@@ -11,13 +11,21 @@ if ( $_REQUEST['operator'] !== 'GLOBE' ) {
 
 require_once 'include/config.php';
 
+##################################################
+// Charge amount, Php2.50, expressed in centavos
+$charge_val = 250;
+
+
+##################################################
+// DEFAULT CHARGING BEHAVIOR (PROD: TRUE)
+$do_charge = FALSE;
+
 
 ##################################################
 // HTTP Request Variables
 $SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['parameters']['SUB_C_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['SUB_R_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['CSP_Txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['txid'] = $tran_id = $_REQUEST['tran_id'];
 $main_key = $_REQUEST['keyword'];
 $param = $_REQUEST['param'];
 $others = trim( $_REQUEST['others'] );
@@ -38,8 +46,14 @@ $msg = '';
 
 
 ##################################################
-// DEFAULT CHARGING BEHAVIOR
-$do_charge = FALSE;
+// INITIALIZE RESPONSE
+$response = array(
+	'response'	=>	0,
+	'reason'	=>	'',
+	'message'	=>	'',
+	'charge'	=>	0,
+	'request'	=>	$_REQUEST
+);
 
 
 ##################################################
@@ -82,28 +96,35 @@ if ( $num = count( $running ) ) {
 ##################################################
 // Finish the program
 
-$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+$SENDSMS['message'] = $msg;
 
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
-	$SENDCHARGE['mo_id'] = $mo_id;
-	$SENDCHARGE['parameters']['CSP_Txid'] = $tran_id;
-	$SENDCHARGE['parameters']['SUB_C_Mobtel'] = $sender;
-	$SENDCHARGE['parameters']['CSP_A_Keyword'] = $CHG_VALS['250'];
+	$SENDCHARGE['mo_id']	=	$mo_id;
+	$SENDCHARGE['txid']		=	$tran_id;
+	$SENDCHARGE['mobtel']	=	$sender;
+	$SENDCHARGE['charge']	=	$charge_val;
 
 	// Send charge request
 	if ( charge_request( $SENDCHARGE ) ) {
 		// Send the SMS
+		$response['charge'] = $charge_val;
 		sms_mt_request( $SENDSMS );
 	}
 } else {
 	// No charging necessary, just send the SMS
+	$response['charge'] = 0;
 	sms_mt_request( $SENDSMS );
 }
 
 
-print "\n\n\n$msg\n\n\n";
+##################################################
+// If we reached here, we're cool, so send response
+$response['response'] = 'OK';
+$response['reason'] = 'OK';
+$response['message'] = $msg;
 
+print json_encode($response, JSON_PRETTY_PRINT);
 
 exit();
 
