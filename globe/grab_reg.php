@@ -89,6 +89,7 @@ if ( $others ) {
 	$name = trim( $parts[0] );
 	// The claimed age of member
 	$age = trim( $parts[1] );
+	settype( $age, "integer" );
 	if ( is_int( $age ) === FALSE ) $age = null;
 	// The address
 	$address = trim( $parts[2] );
