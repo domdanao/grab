@@ -65,6 +65,9 @@ if 	( 	empty ($_REQUEST['motxid']) or
 }
 
 
+$tran_id = $_REQUEST['motxid'];
+
+
 ##################################################
 // Clean up message
 $allwords = preg_replace( '/\s+/', ' ', $_REQUEST['message'] );	// Remove two or more white spaces
