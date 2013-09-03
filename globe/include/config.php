@@ -115,7 +115,7 @@ $WELCOME_MSG = "Welcome to GRAB A GADGET PROMO! Participating in GRAB means you 
 ### This is for Globe SMS MT service
 
 $SENDSMS = array(
-	'url'		=> 'http://180.87.143.49/globe/sendsms.php',
+	'url'		=> 'http://180.87.143.49:8888/globe/sendsms.php',
 	'mo_id'		=> '',			// MO_ID, MANDATORY
 	'txid'		=>	'',			// TXID, MANDATORY
 	'mobtel'	=>	'',			// MOBTEL, MANDATORY
@@ -129,7 +129,7 @@ $SENDSMS = array(
 ### This is for Globe RT Billing service
 
 $SENDCHARGE = array(
-	'url'		=>	'http://180.87.143.49/globe/sendcharge.php',
+	'url'		=>	'http://180.87.143.49:8888/globe/sendcharge.php',
 	'mo_id'		=>	'',			// MO_ID, MANDATORY
 	'txid'		=>	'',			// TXID, MANDATORY
 	'mobtel'	=>	'',			// MOBTEL, MANDATORY
