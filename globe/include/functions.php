@@ -318,8 +318,8 @@ function http_req_rep( $data ) {
 	//print "\n\n\nQUERY: $query \n\n\n";
 	$result = mysql_query( $query );
 	if (mysql_affected_rows() == -1) {
-		// print "MySQL said: " . mysql_error() . "\n\n";
-		return FALSE;
+		return "MySQL said: " . mysql_error() . "\n\n";
+		// return FALSE;
 	} else {
 		return mysql_insert_id();
 	}
@@ -403,8 +403,9 @@ function sms_mt_request( $sendsms ) {
 			'body_content'	=> $sms_it['body_content'],
 			'trans_type'	=> 'MTFREE',
 			);
-
-		if ( http_req_rep( $sendsms_result ) ) {
+		
+		$req_rep = false;
+		if ( $req_rep = http_req_rep( $sendsms_result ) ) {
 			if ( $sms_it["http_code"] === 200 ) {
 				return $sendsms_result;
 			} else {
@@ -415,7 +416,7 @@ function sms_mt_request( $sendsms ) {
 		} else {
 			// Function http_req_rep failed
 			// Log this
-			return "HTTP_REQ_REP FAIL!";
+			return "HTTP_REQ_REP FAIL! $req_rep";
 			#return FALSE;
 		}
 	}

@@ -95,8 +95,6 @@ $response['sendsms'] = $SENDSMS;
 
 print json_encode($response, JSON_PRETTY_PRINT);
 
-print_r($SENDSMS);
-
 exit();
 
 ##################################################
