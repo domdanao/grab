@@ -315,10 +315,9 @@ function http_req_rep( $data ) {
 		total_time = " . $data['total_time'] . ",
 		body_content = '" . mysql_real_escape_string( $data['body_content'] ) . "',
 		trans_type = '" . $data['trans_type'] . "'";
-	//print "\n\n\nQUERY: $query \n\n\n";
 	$result = mysql_query( $query );
 	if (mysql_affected_rows() == -1) {
-		print "MySQL said: " . mysql_error() . "\n\n";
+		//print "MySQL said: " . mysql_error() . "\n\n";
 		return FALSE;
 	} else {
 		return mysql_insert_id();
@@ -384,8 +383,7 @@ function sms_mt_request( $sendsms ) {
 		empty( $sendsms['parameters']['mobtel'] ) 
 		)
 		{
-		return "PARAMETER/S EMPTY!";
-		#return FALSE;
+		return FALSE;
 	} else {
 		// Proceed with SMS MT request
 		$http_start_time = microtime( TRUE );
@@ -409,13 +407,11 @@ function sms_mt_request( $sendsms ) {
 				return $sendsms_result;
 			} else {
 				// Server return some 4xx error code
-				// return "DID NOT RECEIVE 200 FROM SERVER!";
 				return FALSE;
 			}
 		} else {
 			// Function http_req_rep failed
 			// Log this
-			// return "$req_rep";
 			return FALSE;
 		}
 	}
