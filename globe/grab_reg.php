@@ -51,7 +51,7 @@ $response = array(
 // Send a message informing him/her
 // Free message
 if ( $reg = is_registered( $sender ) ) {
-	$msg = "Registered ka na sa GRAB A GADGET Promo. No need to register again. I-grab mo na ang cool item ngayon for 88 pesos only! Txt GRAB BAG to $INLA para makita ang items up for grab! For more info, txt GRAB HELP to $INLA. $BP1";
+	$msg = "Registered ka na sa GRAB A GADGET Promo.\n\nNo need to register again. I-grab mo na ang cool item ngayon for 88 pesos only! Txt GRAB BAG to $INLA para makita ang items up for grab! For more info, txt GRAB HELP to $INLA. $BP1";
 	$SENDSMS['parameters']['message'] = $msg;
 	// Send message
 	sms_mt_request( $SENDSMS );
