@@ -97,6 +97,13 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		// Send the charge
 		if ( $chg = charge_request( $SENDCHARGE ) ) {
 			// Charge success
+			$grab_bag_table = 'grab_' . $grabs['keyword'] . '_' . $grabs['gid'];
+			$start_time = date( "Y-m-d H:i:s", $chg['time_recd'] );
+			$end_time = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
+			
+			$query = "INSERT INTO `unlisubs` SET `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
+			mysql_query( $query );
+			
 			// Get item
 			$item = '';
 			while ( $grabs ) {
@@ -106,7 +113,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			}
 			
 			// End time of unli grab
-			$unli_time_end = date( "M j, Y H:i:s", $chg['time_recd'] );
+			$unli_time_end = date( "M j, Y H:i:s", strtotime($start_time . ' + 1 day') );
 			
 			// Set up the message
 			$msg = "GRAB: Unli na grabs mo sa $item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
@@ -146,6 +153,13 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		// Send the charge
 		if ( $chg = charge_request( $SENDCHARGE ) ) {
 			// Charge success
+			$grab_bag_table = 'grab_' . $grabs['keyword'] . '_' . $grabs['gid'];
+			$start_time = date( "Y-m-d H:i:s", $chg['time_recd'] );
+			$end_time = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
+			
+			$query = "INSERT INTO `unlisubs` SET `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
+			mysql_query( $query );
+			
 			// Get item
 			$item = '';
 			while ( $grabs ) {
@@ -155,7 +169,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			}
 			
 			// End time of unli grab
-			$unli_time_end = date( "M j, Y H:i:s", $chg['time_recd'] );
+			$unli_time_end = date( "M j, Y H:i:s", strtotime($start_time . ' + 1 day') );
 			
 			// Set up the message
 			$msg = "GRAB: Unli na grabs mo sa $item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
