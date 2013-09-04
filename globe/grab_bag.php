@@ -51,8 +51,7 @@ $response = array(
 	'response'	=>	0,
 	'reason'	=>	'',
 	'message'	=>	'',
-	'charge'	=>	0,
-	'request'	=>	$_REQUEST
+	'charge'	=>	0
 );
 
 
@@ -100,10 +99,10 @@ $SENDSMS['message'] = $msg;
 
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
-	$SENDCHARGE['mo_id']	=	$mo_id;
-	$SENDCHARGE['txid']		=	$tran_id;
-	$SENDCHARGE['mobtel']	=	$sender;
-	$SENDCHARGE['charge']	=	$charge_val;
+	$SENDCHARGE['parameters']['mo_id']	=	$mo_id;
+	$SENDCHARGE['parameters']['txid']	=	$tran_id;
+	$SENDCHARGE['parameters']['mobtel']	=	$sender;
+	$SENDCHARGE['parameters']['charge']	=	$charge_val;
 
 	// Send charge request
 	if ( charge_request( $SENDCHARGE ) ) {
