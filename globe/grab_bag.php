@@ -106,14 +106,16 @@ if ( $do_charge ) {
 
 	// Send charge request
 	if ( charge_request( $SENDCHARGE ) ) {
-		// Send the SMS
+		// Compose response
 		$response['charge'] = $charge_val;
-		sms_mt_request( $SENDSMS );
+		$response['reason'] .= 'Charge success ' . $charge_val . '/';
+		// Send the SMS
+		if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 	}
 } else {
 	// No charging necessary, just send the SMS
 	$response['charge'] = 0;
-	sms_mt_request( $SENDSMS );
+	if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 }
 
 
