@@ -67,6 +67,16 @@ $message = "";
 
 
 ##################################################
+// INITIALIZE RESPONSE
+$response = array(
+	'response'	=>	'',
+	'reason'	=>	'',
+	'message'	=>	'',
+	'charge'	=>	0
+);
+
+
+##################################################
 $query = "SELECT * FROM `grab_bag` WHERE `keyword` = '" . $param . "' AND ( '" . $date_mysql . "' BETWEEN `grab_start` AND `grab_end` ) AND ( `operator` REGEXP '" . $operator . "')";
 $result = mysql_query( $query );
 if ( $numrow = mysql_num_rows( $result ) ) {
