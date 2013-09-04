@@ -60,7 +60,7 @@ $response = array(
 
 ##################################################
 // Charging
-$SENDCHARGE['mo_id'] = $_REQUEST['mo_id'];
+$SENDCHARGE['parameters']['mo_id'] = $_REQUEST['mo_id'];
 $SENDCHARGE['parameters']['txid'] = $tran_id;
 $SENDCHARGE['parameters']['mobtel'] = $sender;
 $SENDCHARGE['parameters']['charge'] = $val;
