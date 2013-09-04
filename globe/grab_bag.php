@@ -122,7 +122,6 @@ if ( $do_charge ) {
 ##################################################
 // If we reached here, we're cool, so send response
 $response['response'] = 'OK';
-$response['reason'] = 'OK';
 $response['message'] = $msg;
 
 print json_encode( $response, JSON_PRETTY_PRINT );
