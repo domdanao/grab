@@ -60,35 +60,35 @@ $response = array(
 $running = grab_bag( $smsc_time, $_REQUEST['operator'], $dblink );
 if ( $num = count( $running ) ) {
 	if ( !empty( $_REQUEST['others'] ) ) {
-		// There is a third wo\rrd in the request
+		// There is a third wo\nrd in the request
 		// GRAB BAG <item>
 		$item = strtolower( $_REQUEST['others'] );
 		$item_details = check_item( $item, $smsc_time, $dblink );
 		if ( $item_details !== FALSE ) {
 			// There is an item
-			$msg = "GRAB: " . strtoupper( $item_details['keyword'] ) . " - " . $item_details['info'] . "\r";
-			$msg .= "\rText GRAB " . strtoupper( $item_details['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
+			$msg = "GRAB: " . strtoupper( $item_details['keyword'] ) . " - " . $item_details['info'] . "\n";
+			$msg .= "\nText GRAB " . strtoupper( $item_details['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
 		} else {
 			$msg = "GRAB: Walang ganyang item sa Grab Bag ngayon. $item, $smsc_time, $BP1" . $REGMSG;
 		}
 	} else {
 		// Sub just texted GRAB BAG
-		$msg .= "GRAB-In the Grab Bag ryt now:\r\r";
+		$msg .= "GRAB-In the Grab Bag ryt now:\n\n";
 		$count = 0;
 		foreach ( $running as $row ) {
 			$count++;
-			if ( $count > 1) $msg .= "\r";
+			if ( $count > 1) $msg .= "\n";
 			if ( $num > 1 ) $msg .= "Item $count: ";
 			$msg .= strtoupper( $row['keyword'] );
 			if ( $num == 1 ) $msg .=  " - " . $row['adcopy'];
 		}
-		$msg .= "\r\rGrab an item you want by texting GRAB <ITEM> to $INLA. $BP2";
-		$msg .= "\rFor more item info, txt GRAB BAG <ITEM> to $INLA. $BP1 " . $REGMSG;
+		$msg .= "\n\nGrab an item you want by texting GRAB <ITEM> to $INLA. $BP2";
+		$msg .= "\nFor more item info, txt GRAB BAG <ITEM> to $INLA. $BP1 " . $REGMSG;
 	}
 } else {
 	// No current items in grab bag. Must not happen.
 	$do_charge = FALSE;
-	$msg = "GRAB:\rChill ka lang. Check back later to know when we have stuff in the Grab Bag. $BP1 " . $REGMSG;
+	$msg = "GRAB:\nChill ka lang. Check back later to know when we have stuff in the Grab Bag. $BP1 " . $REGMSG;
 }
 
 
