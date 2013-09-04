@@ -274,7 +274,6 @@ else {
 ##################################################
 // Hit the URL
 $response['http_url'] = $http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $program_path;
-//$response['query'] = $query;
 $response['http_params'] = $http_params;
 
 $rep = hit_http_url( $http_url, $http_params, 'get' );
@@ -284,8 +283,16 @@ $response = array(
 	'body_content'	=>	$rep['body_content']
 );
 
+// Parse body_content
+$parts = explode("\r\n\r\nHTTP/", $response['body_content']);
+$parts = (count($parts) > 1 ? 'HTTP/' : '').array_pop($parts);
+list($headers, $body) = explode("\r\n\r\n", $parts, 2);
+
+$body_array = json_decode( $body );
+
 print json_encode( $response, JSON_PRETTY_PRINT );
 
+print_r($body_array);
 
 ##################################################
 ?>
