@@ -69,6 +69,7 @@ if (!$mo_id or !$message or !$txid or !$mobtel) {
 		$response['response'] = 'OK';
 		$response['reason'] = $reply['http_code'];
 		$response['headers'] = $reply['headers'];
+		$response['url'] = $reply['url'];
 	}
 }
 
