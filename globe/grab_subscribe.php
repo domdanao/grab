@@ -105,7 +105,7 @@ if ( $other_param == 'off' ) {
 
 
 ##################################################
-// UNSUBSCRIBE
+// SUBSCRIBE
 elseif ( $other_param == 'on' ) {
 	// Subscriber explicitly sent ON
 
