@@ -43,14 +43,13 @@ $response = array(
 	'response'	=>	0,
 	'reason'	=>	'',
 	'message'	=>	'',
-	'charge'	=>	0,
-	'request'	=>	$_REQUEST
+	'charge'	=>	0
 );
 
 
 ##################################################
 // The HELP file
-$SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n" .
+$message = $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n" .
 	"GRAB REG name/age/address – to be a member and buy items for P88 only\n" .
 	"GRAB UNLI - get 24hrs unlimited grabs [P20/day]\n" .
 	"GRAB <item> - grab an item\n" .
@@ -64,9 +63,6 @@ $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available c
 ##################################################
 // Finish the program
 
-$chg_req = array();
-$mt_req = array();
-
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
 	$SENDCHARGE['parameters']['mo_id']	=	$mo_id;
@@ -74,23 +70,23 @@ if ( $do_charge ) {
 	$SENDCHARGE['parameters']['mobtel']	=	$sender;
 	$SENDCHARGE['parameters']['charge']	=	$charge_val;
 	// Send charge request
-	if ( $chg_req = charge_request( $SENDCHARGE ) ) {
+	if ( charge_request( $SENDCHARGE ) ) {
+		// Compose response
+		$reponse['reason'] .= 'Charge success ' . $charge_val;
 		// Send the SMS
-		$mt_req = sms_mt_request( $SENDSMS );
+		if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= '/SMS sent';
 	}
 } else {
 	// No charging necessary, just send the SMS
 	$response['charge'] = 0;
-	$mt_req = sms_mt_request( $SENDSMS );
+	if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 }
 
 
 ##################################################
 // If we reached here, we're cool, so send response
 $response['response'] = 'OK';
-$response['reason'] = 'OK';
-//$response['chg_req'] = $chg_req;
-//$response['mt_req'] = $mt_req;
+$response['message'] = $message;
 
 print json_encode($response, JSON_PRETTY_PRINT);
 
