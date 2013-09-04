@@ -285,7 +285,7 @@ $response['total_time'] = $rep['total_time'];
 $parts = explode("\r\n\r\nHTTP/", $response['body_content']);
 $parts = (count($parts) > 1 ? 'HTTP/' : '').array_pop($parts);
 list($headers, $body) = explode("\r\n\r\n", $parts, 2);
-$body_array = json_decode( $body );
+$body_array = json_decode( $body, TRUE );
 $response['http_reply'] = $body_array;
 
 print json_encode( $response, JSON_PRETTY_PRINT );
