@@ -123,6 +123,9 @@ if ( in_array( 'grab', $translated ) ) {
 	if ( in_array( 'reg', $translated ) ) {
 		$second_key = 'reg';
 	}
+	if ( in_array( 'unli', $translated ) ) {
+		$second_key = 'unli';
+	}
 }
 
 
