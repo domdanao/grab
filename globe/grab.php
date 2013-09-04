@@ -279,7 +279,7 @@ $response['http_params'] = $http_params;
 $rep = hit_http_url( $http_url, $http_params, 'get' );
 $response['http_code'] = $rep['http_code'];
 $response['total_time'] = $rep['total_time'];
-//$response['body_content'] = $rep['body_content'];
+$response['body_content'] = $rep['body_content'];
 
 // Parse body_content
 $parts = explode("\r\n\r\nHTTP/", $response['body_content']);
