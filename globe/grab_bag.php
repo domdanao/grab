@@ -64,13 +64,12 @@ if ( $num = count( $running ) ) {
 		// GRAB BAG <item>
 		$item = strtolower( $_REQUEST['others'] );
 		$item_details = check_item( $item, $smsc_time, $dblink );
-		print "$item:$smsc_time";
 		if ( $item_details !== FALSE ) {
 			// There is an item
 			$msg = "GRAB: " . strtoupper( $item_details['keyword'] ) . " - " . $item_details['info'] . "\n";
 			$msg .= "\nText GRAB " . strtoupper( $item_details['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
 		} else {
-			$msg = "GRAB: Walang ganyang item sa Grab Bag ngayon. $BP1" . $REGMSG;
+			$msg = "GRAB: Walang ganyang item sa Grab Bag ngayon. $item, $smsc_time, $BP1" . $REGMSG;
 		}
 	} else {
 		// Sub just texted GRAB BAG
