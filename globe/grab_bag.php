@@ -64,6 +64,7 @@ if ( $num = count( $running ) ) {
 		// GRAB BAG <item>
 		$item = strtolower( $_REQUEST['others'] );
 		$item_details = check_item( $item, $smsc_time, $dblink );
+		print "$item:$smsc_time";
 		if ( $item_details !== FALSE ) {
 			// There is an item
 			$msg = "GRAB: " . strtoupper( $item_details['keyword'] ) . " - " . $item_details['info'] . "\n";
