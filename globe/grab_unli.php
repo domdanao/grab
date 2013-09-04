@@ -49,6 +49,16 @@ $do_charge = TRUE;
 
 
 ##################################################
+// INITIALIZE RESPONSE
+$response = array(
+	'response'	=>	'',
+	'reason'	=>	'',
+	'message'	=>	'',
+	'charge'	=>	$val
+);
+
+
+##################################################
 // Charging
 $SENDCHARGE['mo_id'] = $_REQUEST['mo_id'];
 $SENDCHARGE['parameters']['txid'] = $tran_id;
@@ -81,9 +91,9 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 	} elseif ( $bilang == 1 ) {
 		// Only one item in grab bag
 		// Register subscriber for grab
-		// Set up charging, P20
-		$val = '2000';
-		$SENDCHARGE['parameters']['CSP_A_Keyword'] = $CHG_VALS[$val];
+		// Set up charging
+		$val = '250';	// SET TO PROPER PRICE!!!
+		$SENDCHARGE['parameters']['charge'] = $val;
 		// Send the charge
 		if ( $chg = charge_request( $SENDCHARGE ) ) {
 			// Charge success
@@ -100,13 +110,17 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			
 			// Set up the message
 			$msg = "GRAB: Unli na grabs mo sa $item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+			$response['response'] = 'OK';
+			$response['reason'] = 'Charge success';
 		} else {
 			// Charge failure
 			$msg = "GRAB: Sorry, kulang balance mo sa iyong account.";
+			$response['response'] = 'NOK';
+			$response['reason'] = 'Charge failed';
 		}
 	} else {
 		// No item in grab bag
-		$msg = "GRAB:\nChill ka lang. Check back later to know when we have stuff in the Grab Bag. $BP1";
+		$msg = "GRAB:\nChill ka lang. Check back later to know when we have stuff in the Grab Bag.";
 	}
 } else {
 	// Subscriber sent GRAB UNLI ITEM
@@ -127,8 +141,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		// Valid request
 		// Register subscriber for grab
 		// Set up charging, P20
-		$val = '2000';
-		$SENDCHARGE['parameters']['CSP_A_Keyword'] = $CHG_VALS[$val];
+		$val = '250';	//// SET PROPER PRICE!!!
+		$SENDCHARGE['parameters']['charge'] = $val;
 		// Send the charge
 		if ( $chg = charge_request( $SENDCHARGE ) ) {
 			// Charge success
@@ -145,9 +159,13 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			
 			// Set up the message
 			$msg = "GRAB: Unli na grabs mo sa $item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+			$response['response'] = 'OK';
+			$response['reason'] = 'Charge success';
 		} else {
 			// Charge failure
 			$msg = "GRAB: Sorry, kulang balance mo sa iyong account.";
+			$response['response'] = 'NOK';
+			$response['reason'] = 'Charge fail';
 		}
 		
 	} else {
@@ -155,6 +173,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		// Send charge
 		if ( charge_request( $SENDCHARGE ) ) {
 			$msg = "Sorry, u sent an invalid request.\n\nPara unli grabs mo for 24hrs, send GRAB UNLI <item> to $INLA. $BP1";
+			$response['response'] = 'NOK';
+			$response['reason'] = 'Invalid request';	
 		}
 	}
 }
@@ -162,12 +182,10 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 
 ##################################################
 // Send the SMS MT
-$SENDSMS['parameters']['message'] = $msg;
+$response['message'] = $SENDSMS['parameters']['message'] = $msg;
 sms_mt_request( $SENDSMS );
 
-
-print "\n\n\n---------------\nMESSAGE SENT:\n$msg---------------\n\n\n";
-
+print json_encode( $response, JSON_PRETTY_PRINT );
 
 ##################################################
 exit();

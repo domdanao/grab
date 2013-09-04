@@ -53,6 +53,7 @@ $response = array(
 	'charge'	=>	$charge_val
 );
 
+
 ##################################################
 // Check the currently running grab games
 
