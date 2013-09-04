@@ -169,7 +169,9 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 						}
 
 						exit();
+						
 					} else {
+						
 						// Subscriber is not the holder, so give him the item
 						mysql_query("BEGIN");
 

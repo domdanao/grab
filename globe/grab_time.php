@@ -50,8 +50,7 @@ $response = array(
 	'response'	=>	'',
 	'reason'	=>	'',
 	'message'	=>	'',
-	'charge'	=>	$charge_val,
-	'request'	=>	$_REQUEST
+	'charge'	=>	$charge_val
 );
 
 ##################################################
