@@ -290,5 +290,6 @@ $response['http_reply'] = $body_array;
 
 print json_encode( $response, JSON_PRETTY_PRINT );
 
+print_r($body_array);
 ##################################################
 ?>
