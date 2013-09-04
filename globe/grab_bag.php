@@ -136,7 +136,6 @@ function check_item( $item, $smsc_time, $dblink ) {
 	$query = "SELECT * FROM `grab`.`grab_bag`
 		WHERE `grab`.`grab_bag`.`keyword` = '$item'
 		AND '$smsc_time' BETWEEN `grab_start` AND `grab_end`";
-		print $query;
 	$result = mysql_query( $query );
 	if ( mysql_num_rows( $result ) ) {
 		return mysql_fetch_assoc( $result );
