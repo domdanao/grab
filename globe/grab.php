@@ -277,22 +277,18 @@ $response['http_url'] = $http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . 
 $response['http_params'] = $http_params;
 
 $rep = hit_http_url( $http_url, $http_params, 'get' );
-$response = array(
-	'http_code'		=>	$rep['http_code'],
-	'total_time'	=>	$rep['total_time'],
-	'body_content'	=>	$rep['body_content']
-);
+$response['http_code'] = $rep['http_code'];
+$response['total_time'] = $rep['total_time'];
+//$response['body_content'] = $rep['body_content'];
 
 // Parse body_content
 $parts = explode("\r\n\r\nHTTP/", $response['body_content']);
 $parts = (count($parts) > 1 ? 'HTTP/' : '').array_pop($parts);
 list($headers, $body) = explode("\r\n\r\n", $parts, 2);
-
 $body_array = json_decode( $body );
+$response['http_reply'] = $body_array;
 
 print json_encode( $response, JSON_PRETTY_PRINT );
-
-print_r($body_array);
 
 ##################################################
 ?>
