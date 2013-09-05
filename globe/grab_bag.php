@@ -63,11 +63,13 @@ if ( $num = count( $running ) ) {
 		// There is a third word in the request
 		// GRAB BAG <item>
 		$item = strtolower( $_REQUEST['others'] );
-		$item_details = check_item( $item, $smsc_time, $dblink );
-		if ( $item_details !== FALSE ) {
+		$query = "SELECT * FROM `grab_bag` WHERE `keyword` = '$item' AND '$smsc_time' BETWEEN `grab_start` AND `grab_end`";
+		$result = mysql_query($query);
+		if ( mysql_num_rows( $result ) ) {
+			$row = mysql_fetch_assoc( $result );
 			// There is an item
-			$msg = "GRAB: " . strtoupper( $item_details['keyword'] ) . " - " . $item_details['info'] . "\n";
-			$msg .= "\nText GRAB " . strtoupper( $item_details['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
+			$msg = "GRAB: " . strtoupper( $row['keyword'] ) . " - " . $row['info'] . "\n";
+			$msg .= "\nText GRAB " . strtoupper( $row['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
 		} else {
 			$msg = "GRAB: Walang ganyang item sa Grab Bag ngayon. $item, $smsc_time, $BP1" . $REGMSG;
 		}
@@ -133,8 +135,8 @@ exit();
 // Check item in GRAB BAG
 function check_item( $item, $smsc_time, $dblink ) {
 	$item = strtolower($item);
-	$query = "SELECT * FROM `grab`.`grab_bag`
-		WHERE `grab`.`grab_bag`.`keyword` = '$item'
+	$query = "SELECT * FROM `grab_bag`
+		WHERE `keyword` = '$item'
 		AND '$smsc_time' BETWEEN `grab_start` AND `grab_end`";
 	$result = mysql_query( $query );
 	if ( mysql_num_rows( $result ) ) {
