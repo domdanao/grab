@@ -73,8 +73,6 @@ if ( $num = count( $running ) ) {
 		}
 	} else {
 		// Sub just texted GRAB BAG
-		$msg = "May laman ang grab bag ngayon.";
-		/*
 		$msg .= "GRAB-In the Grab Bag ryt now:\n\n";
 		$count = 0;
 		foreach ( $running as $row ) {
@@ -86,7 +84,6 @@ if ( $num = count( $running ) ) {
 		}
 		$msg .= "\n\nGrab an item you want by texting GRAB <ITEM> to $INLA. $BP2";
 		$msg .= "\nFor more item info, txt GRAB BAG <ITEM> to $INLA. $BP1 " . $REGMSG;
-		*/
 	}
 } else {
 	// No current items in grab bag. Must not happen.
@@ -98,7 +95,7 @@ if ( $num = count( $running ) ) {
 ##################################################
 // Finish the program
 
-$SENDSMS['message'] = $msg;
+$SENDSMS['parameters']['message'] = $msg;
 
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
