@@ -59,8 +59,8 @@ $response = array(
 // Inspect the Grab Bag and compose messages
 $running = grab_bag( $smsc_time, $_REQUEST['operator'], $dblink );
 if ( $num = count( $running ) ) {
-	if ( !empty( $_REQUEST['others'] ) ) {
-		// There is a third wo\nrd in the request
+	if ( isset( $_REQUEST['others'] ) ) {
+		// There is a third word in the request
 		// GRAB BAG <item>
 		$item = strtolower( $_REQUEST['others'] );
 		$item_details = check_item( $item, $smsc_time, $dblink );
@@ -123,7 +123,6 @@ if ( $do_charge ) {
 // If we reached here, we're cool, so send response
 $response['response'] = 'OK';
 $response['message'] = $msg;
-$response['sendsms'] = $SENDSMS;
 
 print json_encode( $response, JSON_PRETTY_PRINT );
 
