@@ -82,10 +82,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		$msg = "GRAB: May $bilang items ngayon sa Grab Bag.\n\n";
 		$item = '';
 		foreach ( $grabs as $row ) {
-			foreach ( $row as $k => $v ) {
-				if ( $k == 'keyword') $item = strtoupper( $v );
-				$msg .= "To unli-grab " . $item . ", send GRAB UNLI " . $item . " to $INLA.\n";
-			}
+			$item = strtoupper( $row['keyword'] );
+			$msg .= "To unli-grab " . $item . ", send GRAB UNLI " . $item . " to $INLA.\n";
 		}
 		$msg .= $REGMSG;
 	} elseif ( $bilang == 1 ) {
@@ -106,10 +104,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			
 			// Get item
 			$item = '';
-			while ( $grabs ) {
-				foreach ( $grabs as $k => $v ) {
-					if ( $k == 'keyword' ) $item = strtoupper( $v );
-				}
+			foreach ( $grabs as $row ) {
+				$item = strtoupper( $row['keyword'] );
 			}
 			
 			// End time of unli grab
@@ -134,14 +130,11 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 	// Check if there is a match, search grabs array
 	$match = FALSE;
 	foreach ( $grabs as $row ) {
-		foreach ( $row as $k => $v ) {
-			if ( $k == 'keyword' ) {
-				// Match
-				if ( $v == $param ) $match = TRUE;
-				// End loop if already TRUE
-				break 2;
-			}
-		}	
+		// Match
+		if ( $row['keyword'] == $param ) $match = TRUE;
+		// End loop if already TRUE
+		break;
+		}
 	}
 	
 	if ( $match ) {
@@ -163,9 +156,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			// Get item
 			$item = '';
 			foreach ( $grabs as $row ) {
-				foreach ( $row as $k => $v ) {
-					if ( $k == 'keyword' ) $item = strtoupper( $v );
-				}
+				$item = strtoupper( $row['keyword'] );
 			}
 			
 			// End time of unli grab
