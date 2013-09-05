@@ -134,7 +134,6 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		if ( $row['keyword'] == $param ) $match = TRUE;
 		// End loop if already TRUE
 		break;
-		}
 	}
 	
 	if ( $match ) {
