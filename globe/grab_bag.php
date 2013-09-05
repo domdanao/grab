@@ -130,19 +130,5 @@ print json_encode( $response, JSON_PRETTY_PRINT );
 
 exit();
 
-
 ##################################################
-// Check item in GRAB BAG
-function check_item( $item, $smsc_time, $dblink ) {
-	$item = strtolower($item);
-	$query = "SELECT * FROM `grab_bag`
-		WHERE `keyword` = '$item'
-		AND '$smsc_time' BETWEEN `grab_start` AND `grab_end`";
-	$result = mysql_query( $query );
-	if ( mysql_num_rows( $result ) ) {
-		return mysql_fetch_assoc( $result );
-	} else {
-		return FALSE;
-	}
-}
 ?>

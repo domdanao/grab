@@ -81,8 +81,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		// Set up the message
 		$msg = "GRAB: May $bilang items ngayon sa Grab Bag.\n\n";
 		$item = '';
-		while ( $grabs ) {
-			foreach ( $grabs as $k => $v ) {
+		foreach ( $grabs as $row ) {
+			foreach ( $row as $k => $v ) {
 				if ( $k == 'keyword') $item = strtoupper( $v );
 				$msg .= "To unli-grab " . $item . ", send GRAB UNLI " . $item . " to $INLA.\n";
 			}
@@ -133,8 +133,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 	// Subscriber sent GRAB UNLI ITEM
 	// Check if there is a match, search grabs array
 	$match = FALSE;
-	while ( $grabs ) {
-		foreach ( $grabs as $k => $v ) {
+	foreach ( $grabs as $row ) {
+		foreach ( $row as $k => $v ) {
 			if ( $k == 'keyword' ) {
 				// Match
 				if ( $v == $param ) $match = TRUE;
@@ -162,8 +162,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			
 			// Get item
 			$item = '';
-			while ( $grabs ) {
-				foreach ( $grabs as $k => $v ) {
+			foreach ( $grabs as $row ) {
+				foreach ( $row as $k => $v ) {
 					if ( $k == 'keyword' ) $item = strtoupper( $v );
 				}
 			}
