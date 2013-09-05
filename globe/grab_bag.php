@@ -126,10 +126,10 @@ if ( $do_charge ) {
 // If we reached here, we're cool, so send response
 $response['response'] = 'OK';
 $response['message'] = $msg;
+$response['sendsms'] = $SENDSMS;
 
 print json_encode( $response, JSON_PRETTY_PRINT );
 
-print_r($SENDSMS);
 exit();
 
 
