@@ -8,19 +8,6 @@ require_once 'include/config.php';
 
 ##################################################
 /*
-// LIST TEST PHONES HERE
-$allowed = array(
-	'',
-	'',
-	''
-	);
-if (!in_array($_REQUEST['from'], $allowed)) {
-	exit;
-}
-
-*/
-
-/*
 REQUEST PARAMETERS
 motxid
 msisdn
@@ -80,7 +67,7 @@ $params = '';
 $total_words = count( $word_arr );
 if ( $total_words > 1 ) {
 	$second_key = strtolower( $word_arr[1] );
-	// This is to handle GRAB REG Mark Sy/25/1 Rizal Ave, Manila
+	// This is to handle "GRAB REG Mark Sy/25/1 Rizal Ave, Manila" pattern
 	if ( $total_words > 2 ) {
 		$new_arr = array_slice( $word_arr, 2 );
 		if ( count( $new_arr ) > 1 ) {
@@ -181,7 +168,7 @@ if ( mysql_affected_rows() == -1 ) {
 	$SENDSMS['parameters']['txid'] = $_REQUEST['motxid'];
 	$SENDSMS['parameters']['mobtel'] = $PROGRAM_OWNER;
 	$SENDSMS['parameters']['message'] = 'ERROR:globe/grab.php:fail_insert:query:'. $query;
-	hit_http_url($SENDSMS['url'], $SENDSMS['data'], 'get');
+	hit_http_url( $SENDSMS['url'], $SENDSMS['data'], 'get' );
 	exit();
 } else {
 	$mo_id = mysql_insert_id();
@@ -293,9 +280,9 @@ $response['http_code'] = $rep['http_code'];
 $response['total_time'] = $rep['total_time'];
 
 // Parse body_content
-$parts = explode("\r\n\r\nHTTP/", $rep['body_content']);
-$parts = (count($parts) > 1 ? 'HTTP/' : '').array_pop($parts);
-list($headers, $body) = explode("\r\n\r\n", $parts, 2);
+$parts = explode( "\r\n\r\nHTTP/", $rep['body_content'] );
+$parts = ( count( $parts ) > 1 ? 'HTTP/' : '') . array_pop( $parts );
+list( $headers, $body ) = explode( "\r\n\r\n", $parts, 2 );
 $body_array = json_decode( $body, TRUE );
 $response['http_reply'] = $body_array;
 
