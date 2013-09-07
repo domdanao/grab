@@ -83,7 +83,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		$item = '';
 		foreach ( $grabs as $row ) {
 			$item = strtoupper( $row['keyword'] );
-			$msg .= "To unli-grab " . $item . ", send GRAB UNLI " . $item . " to $INLA.\n";
+			$msg .= "To unli-grab " . strtoupper( $item ) . ", send GRAB UNLI " . $item . " to $INLA.\n";
 		}
 		$msg .= $REGMSG;
 	} elseif ( $bilang == 1 ) {
@@ -94,27 +94,28 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		$SENDCHARGE['parameters']['charge'] = $val;
 		// Send the charge
 		if ( $chg = charge_request( $SENDCHARGE ) ) {
+			$item = '';
+			$gid = 0;
+			foreach ( $grabs as $row ) {
+				$item = $row['keyword'];
+				$gid = $row['gid'];
+			}
 			// Charge success
-			$grab_bag_table = 'grab_' . $grabs['keyword'] . '_' . $grabs['gid'];
+			$grab_bag_table = 'grab_' . $item . '_' . $gid;
 			$start_time = date( "Y-m-d H:i:s", $chg['time_recd'] );
 			$end_time = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
 			
-			$query = "INSERT INTO `unlisubs` SET `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
+			$query = "INSERT INTO `unlisubs` SET `msisdn` = '" . $sender . "', `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
 			mysql_query( $query );
-			
-			// Get item
-			$item = '';
-			foreach ( $grabs as $row ) {
-				$item = strtoupper( $row['keyword'] );
-			}
 			
 			// End time of unli grab
 			$unli_time_end = date( "M j, Y H:i:s", strtotime($start_time . ' + 1 day') );
 			
 			// Set up the message
-			$msg = "GRAB: Unli na grabs mo sa $item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+			$upper_item = strtoupper( $item );
+			$msg = "GRAB: Unli na grabs mo sa $upper_item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
 			$response['response'] = 'OK';
-			$response['reason'] = 'Charge success';
+			$response['reason'] = 'Charge success ' . $val;
 		} else {
 			// Charge failure
 			$msg = "GRAB: Sorry, kulang balance mo sa iyong account.";
@@ -187,7 +188,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 ##################################################
 // Send the SMS MT
 $response['message'] = $SENDSMS['parameters']['message'] = $msg;
-sms_mt_request( $SENDSMS );
+if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 
 print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
