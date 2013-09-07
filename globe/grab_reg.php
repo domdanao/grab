@@ -101,7 +101,7 @@ if ( $others ) {
 		sms_mt_request( $SENDSMS );
 		// Compose and print reply to request
 		$response['response'] = 'NOK';
-		$response['reason'] = 'Parameters missing or invalid: $others'; 
+		$response['reason'] = "Parameters missing or invalid: $others"; 
 		$response['message'] = $msg;
 		print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 		exit();
