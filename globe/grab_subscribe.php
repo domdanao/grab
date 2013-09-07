@@ -29,8 +29,7 @@ $response = array(
 	'response'	=>	0,
 	'reason'	=>	'',
 	'message'	=>	'',
-	'charge'	=>	0,
-	'request'	=>	$_REQUEST
+	'charge'	=>	0
 );
 
 
