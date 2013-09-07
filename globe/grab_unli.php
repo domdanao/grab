@@ -137,7 +137,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		if ( $chg = charge_request( $SENDCHARGE ) ) {
 			// Charge success
 
-			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) {
+			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
 				// Set up the message
 				$msg = "GRAB: Unli na grabs mo sa $item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
