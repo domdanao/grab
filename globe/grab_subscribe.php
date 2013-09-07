@@ -50,11 +50,6 @@ $msg = '';
 
 
 ##################################################
-// Charging: no charge by default
-$do_charge = FALSE;
-
-
-##################################################
 // Subscriber may not un/subscribe if not registered
 if ( !is_registered( $sender ) ) {
 	// This is an error scenario, so charge
@@ -68,12 +63,13 @@ if ( !is_registered( $sender ) ) {
 	if ( charge_request( $SENDCHARGE ) ) {
 		// Send the SMS
 		$response['response'] = 'OK';
-		$response['reason']	= 'Charge successful';
-		$response['mesage'] = $msg;
+		$response['reason']	= 'Charge successful ' . $charge_val . '/';
+		$response['message'] = $msg;
 		$response['charge'] = $charge_val;
 		$SENDSMS['parameters']['message'] = "GRAB: Ooops! Register ka muna for free para makasali. Txt GRAB REG NAME/AGE/ADDRESS to 2889. Ex. GRAB REG MARK SY/25/8 Apo St, QC";
 		sms_mt_request( $SENDSMS );
 	}
+	print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 	exit();
 }
 
@@ -123,8 +119,7 @@ elseif ( $other_param == 'on' ) {
 			// Success inserting subscriber in auction_alerts table
 			$msg = "Ayos! Subscribed ka na sa GRAB UPDATES! Makaka-receive ka na ng daily updates on new grab items, ur grab time, grab tips and other Club news! Para mag-unsubscribe,txt STOP GRAB to $INLA for free.";
 		} else {
-			// Did not succeed insert in auction_alerts table
-			// $logthis .= $prepend . " Failed inserting subscriber <$sender> into auction_alerts.\n";
+			// $logthis .= $prepend . " Failed inserting subscriber <$sender>.\n";
 		}
 	}
 }
