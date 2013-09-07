@@ -39,13 +39,11 @@ function is_registered( $msisdn ) {
 function is_unlisub( $msisdn ) {
 	global $dblink;
 	$timenow = date( "Y-m-d H:i:s" );
-	if ( $row = is_registered( $msisdn ) ) {
-		$result = mysql_query( "SELECT * FROM `unlisubs` WHERE `mo_id` = '" . $row['mo_id'] . "' AND ('" . $timenow . "' BETWEEN `time_start` AND `time_end`)" );
-		if ( mysql_num_rows( $result ) ) {
-			return mysql_fetch_assoc( $result );
-		} else {
-			return FALSE;
-		}
+	$result = mysql_query( "SELECT * FROM `unlisubs` WHERE `msisdn` = '" . $msisdn . "' AND ('" . $timenow . "' BETWEEN `time_start` AND `time_end`)" );
+	if ( mysql_num_rows( $result ) ) {
+		return mysql_fetch_assoc( $result );
+	} else {
+		return FALSE;
 	}
 }
 
@@ -209,7 +207,7 @@ function record_mt_msg( $data ) {
 		reqtime = '" . $reqtime . "',
 		charge_code = '" . $data['action'] . "'";
 	$result = mysql_query($query);
-	if (mysql_affected_rows() == -1) {
+	if ( mysql_affected_rows() == -1 ) {
 		return FALSE;
 	} else {
 		return mysql_insert_id();

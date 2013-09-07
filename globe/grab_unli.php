@@ -92,30 +92,20 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		// Set up charging
 		$val = '250';	// SET TO PROPER PRICE!!!
 		$SENDCHARGE['parameters']['charge'] = $val;
+		
 		// Send the charge
-		if ( $chg = charge_request( $SENDCHARGE ) ) {
-			$item = '';
-			$gid = 0;
-			foreach ( $grabs as $row ) {
-				$item = $row['keyword'];
-				$gid = $row['gid'];
+		if ( $chg_info = charge_request( $SENDCHARGE ) ) {
+			// Charging is successful
+			
+			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
+				// Set up the message
+				$upper_item = strtoupper( $item );
+				$msg = "GRAB: Unli na grabs mo sa $upper_item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+				$response['response'] = 'OK';
+				$response['reason'] = 'Charge success ' . $val . '/';				
+			} else {
+				// This should never happen, but handle
 			}
-			// Charge success
-			$grab_bag_table = 'grab_' . $item . '_' . $gid;
-			$start_time = date( "Y-m-d H:i:s", $chg['time_recd'] );
-			$end_time = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
-			
-			$query = "INSERT INTO `unlisubs` SET `msisdn` = '" . $sender . "', `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
-			mysql_query( $query );
-			
-			// End time of unli grab
-			$unli_time_end = date( "M j, Y H:i:s", strtotime($start_time . ' + 1 day') );
-			
-			// Set up the message
-			$upper_item = strtoupper( $item );
-			$msg = "GRAB: Unli na grabs mo sa $upper_item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
-			$response['response'] = 'OK';
-			$response['reason'] = 'Charge success ' . $val;
 		} else {
 			// Charge failure
 			$msg = "GRAB: Sorry, kulang balance mo sa iyong account.";
@@ -146,26 +136,13 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		// Send the charge
 		if ( $chg = charge_request( $SENDCHARGE ) ) {
 			// Charge success
-			$grab_bag_table = 'grab_' . $grabs['keyword'] . '_' . $grabs['gid'];
-			$start_time = date( "Y-m-d H:i:s", $chg['time_recd'] );
-			$end_time = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
-			
-			$query = "INSERT INTO `unlisubs` SET `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
-			mysql_query( $query );
-			
-			// Get item
-			$item = '';
-			foreach ( $grabs as $row ) {
-				$item = strtoupper( $row['keyword'] );
+
+			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) {
+				// Set up the message
+				$msg = "GRAB: Unli na grabs mo sa $item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+				$response['response'] = 'OK';
+				$response['reason'] = 'Charge success ' . $val . '/';				
 			}
-			
-			// End time of unli grab
-			$unli_time_end = date( "M j, Y H:i:s", strtotime($start_time . ' + 1 day') );
-			
-			// Set up the message
-			$msg = "GRAB: Unli na grabs mo sa $item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
-			$response['response'] = 'OK';
-			$response['reason'] = 'Charge success';
 		} else {
 			// Charge failure
 			$msg = "GRAB: Sorry, kulang balance mo sa iyong account.";
@@ -194,4 +171,38 @@ print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
 ##################################################
 exit();
+
+
+##################################################
+function insert_or_update_unlisub_table($grabs, $chg_info, $sender, $dblink) {
+	$item = '';
+	$gid = 0;
+	foreach ( $grabs as $row ) {
+		$item = $row['keyword'];
+		$gid = $row['gid'];
+	}
+	$grab_bag_table = 'grab_' . $item . '_' . $gid;
+	
+	$end_time = null;
+	
+	if ( $unlisub = is_unlisub( $sender) ) {
+		// If the sender is an unlisub, add one full day after end_time in unlisub table
+		$end_time = date( "Y-m-d H:i:s", strtotime($unlisub['end_time'] . ' + 1 day') );
+		$query = "UPDATE `unlisubs` SET `end_time` = '". $end_time ."' WHERE `msisdn` = '" . $sender . "' AND `grab_bag_table` = '" . $grab_bag_table . "'";
+	} else {
+		// Sender is not unlisub yet, so create a record
+		$start_time = date( "Y-m-d H:i:s", $chg_info['time_recd'] );			
+		$end_time = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
+		$query = "INSERT INTO `unlisubs` SET `msisdn` = '" . $sender . "', `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
+	}
+	$result = mysql_query( $query );
+	if ( mysql_affected_rows() == -1 ) {
+		return FALSE;
+	} else {
+		return array(
+			'item'	=>	$item,
+			'end_time'	=> $end_time
+		);
+	}
+}
 ?>
