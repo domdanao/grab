@@ -59,7 +59,7 @@ if ( $reg = is_registered( $sender ) ) {
 	$response['response'] = 'NOK';
 	$response['reason'] = 'Already registered.'; 
 	$response['message'] = $msg;
-	print json_encode( $response, JSON_PRETTY_PRINT );
+	print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 	exit();
 }
 
@@ -80,7 +80,7 @@ if ( $others ) {
 		$response['response'] = 'NOK';
 		$response['reason'] = 'Invalid format'; 
 		$response['message'] = $msg;
-		print json_encode( $response, JSON_PRETTY_PRINT );
+		print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 		exit();
 	}
 
@@ -103,7 +103,7 @@ if ( $others ) {
 		$response['response'] = 'NOK';
 		$response['reason'] = 'Parameters missing'; 
 		$response['message'] = $msg;
-		print json_encode( $response, JSON_PRETTY_PRINT );
+		print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 		exit();
 	}
 
@@ -127,7 +127,7 @@ if ( $others ) {
 		$response['response'] = 'OK';
 		$response['reason'] = 'Successful registration'; 
 		$response['message'] = $msg;
-		print json_encode( $response, JSON_PRETTY_PRINT );
+		print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 	}
 } else {
 	// Just sent GRAB REG
@@ -139,7 +139,7 @@ if ( $others ) {
 	$response['response'] = 'NOK';
 	$response['reason'] = 'Parameters missing'; 
 	$response['message'] = $msg;
-	print json_encode( $response, JSON_PRETTY_PRINT );
+	print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 }
 
 exit();

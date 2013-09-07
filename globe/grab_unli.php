@@ -189,7 +189,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 $response['message'] = $SENDSMS['parameters']['message'] = $msg;
 sms_mt_request( $SENDSMS );
 
-print json_encode( $response, JSON_PRETTY_PRINT );
+print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
 ##################################################
 exit();

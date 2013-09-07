@@ -126,7 +126,7 @@ if ( $do_charge ) {
 $response['response'] = 'OK';
 $response['message'] = $msg;
 
-print json_encode( $response, JSON_PRETTY_PRINT );
+print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
 exit();
 
