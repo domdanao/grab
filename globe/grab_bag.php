@@ -59,7 +59,20 @@ $response = array(
 // Inspect the Grab Bag and compose messages
 $running = grab_bag( $smsc_time, $_REQUEST['operator'], $dblink );
 if ( $num = count( $running ) ) {
-	if ( isset( $_REQUEST['others'] ) ) {
+	if ( empty( $_REQUEST['others'] ) ) {
+		// Sub just texted GRAB BAG
+		$msg .= "GRAB-In the Grab Bag ryt now:\n\n";
+		$count = 0;
+		foreach ( $running as $row ) {
+			$count++;
+			if ( $count > 1) $msg .= "\n";
+			if ( $num > 1 ) $msg .= "Item $count: ";
+			$msg .= strtoupper( $row['keyword'] );
+			if ( $num == 1 ) $msg .=  " - " . $row['adcopy'];
+		}
+		$msg .= "\n\nGrab an item you want by texting GRAB <ITEM> to $INLA. $BP2";
+		$msg .= "\nFor more item info, txt GRAB BAG <ITEM> to $INLA. $BP1 " . $REGMSG;
+	} else {
 		// There is a third word in the request
 		// GRAB BAG <item>
 		$item = strtolower( $_REQUEST['others'] );
@@ -73,19 +86,6 @@ if ( $num = count( $running ) ) {
 		} else {
 			$msg = "GRAB: Walang ganyang item sa Grab Bag ngayon. $item, $smsc_time, $BP1" . $REGMSG;
 		}
-	} else {
-		// Sub just texted GRAB BAG
-		$msg .= "GRAB-In the Grab Bag ryt now:\n\n";
-		$count = 0;
-		foreach ( $running as $row ) {
-			$count++;
-			if ( $count > 1) $msg .= "\n";
-			if ( $num > 1 ) $msg .= "Item $count: ";
-			$msg .= strtoupper( $row['keyword'] );
-			if ( $num == 1 ) $msg .=  " - " . $row['adcopy'];
-		}
-		$msg .= "\n\nGrab an item you want by texting GRAB <ITEM> to $INLA. $BP2";
-		$msg .= "\nFor more item info, txt GRAB BAG <ITEM> to $INLA. $BP1 " . $REGMSG;
 	}
 } else {
 	// No current items in grab bag. Must not happen.
