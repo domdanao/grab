@@ -64,10 +64,10 @@ if ( !is_registered( $sender ) ) {
 		// Send the SMS
 		$response['response'] = 'OK';
 		$response['reason']	= 'Charge successful ' . $charge_val . '/';
-		$response['message'] = $msg;
 		$response['charge'] = $charge_val;
-		$SENDSMS['parameters']['message'] = "GRAB: Ooops! Register ka muna for free para makasali. Txt GRAB REG NAME/AGE/ADDRESS to 2889. Ex. GRAB REG MARK SY/25/8 Apo St, QC";
-		sms_mt_request( $SENDSMS );
+		$msg = $SENDSMS['parameters']['message'] = "GRAB: Ooops! Register ka muna for free para makasali. Txt GRAB REG NAME/AGE/ADDRESS to 2889. Ex. GRAB REG MARK SY/25/8 Apo St, QC";
+		$response['message'] = $msg;
+		if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 	}
 	print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 	exit();
