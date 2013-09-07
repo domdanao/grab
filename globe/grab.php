@@ -275,6 +275,7 @@ else {
 $response['http_url'] = $http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $program_path;
 $response['http_params'] = $http_params;
 
+/*
 $rep = hit_http_url( $http_url, $http_params, 'get' );
 $response['http_code'] = $rep['http_code'];
 $response['total_time'] = $rep['total_time'];
@@ -285,7 +286,8 @@ $parts = ( count( $parts ) > 1 ? 'HTTP/' : '') . array_pop( $parts );
 list( $headers, $body ) = explode( "\r\n\r\n", $parts, 2 );
 $body_array = json_decode( $body, TRUE );
 $response['http_reply'] = $body_array;
-
+*/
+	
 print json_encode( $response, JSON_PRETTY_PRINT );
 
 ##################################################
