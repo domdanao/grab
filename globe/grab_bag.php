@@ -82,7 +82,6 @@ if ( $num = count( $running ) ) {
 		if ( mysql_num_rows( $result ) ) {
 			$row = mysql_fetch_assoc( $result );
 			// There is an item
-			if ( is_unlisub( $sender ) ) $BP2 = '';
 			$msg = "GRAB: " . strtoupper( $row['keyword'] ) . " - " . $row['info'] . "\n";
 			$msg .= "\nText GRAB " . strtoupper( $row['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
 		} else {
