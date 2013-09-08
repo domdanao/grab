@@ -161,12 +161,12 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 						$duration = duration_find( $totalholdtime );
 						$duration_out = duration_out( $duration );
 						$message = "GRAB: Hawak mo pa rin ang " . $the_item . " kaya di mo na kailangang i-grab.\n\nTotal hold time mo so far para sa " . $the_item . ": " . $duration_out . ".\n\nWag pabayaang ma-grab ng iba. Pag natanggap mo alert na naagaw ito, grab mo lang uli!";
-						$SENDSMS['parameters']['message'] = $message;
+						$response['message'] = $SENDSMS['parameters']['message'] = $message;
 						
 						$SENDCHARGE['parameters']['mo_id'] = $mo_id;
 						$SENDCHARGE['parameters']['txid'] = $tran_id;
 						$SENDCHARGE['parameters']['mobtel'] = $sender;
-						$SENDCHARGE['parameters']['charge'] = $charge_val;
+						$response['charge'] = $SENDCHARGE['parameters']['charge'] = $charge_val;
 						
 						if ( charge_request( $SENDCHARGE ) ) {
 							$response['response'] = 'OK';
