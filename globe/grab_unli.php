@@ -99,7 +99,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
 				// Set up the message
 				$item_uppercase = strtoupper( $update_or_insert['item'] );
-				$msg = "GRAB: Unli na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
+				$msg = "GRAB: Unlimited na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';				
 			} else {
@@ -197,34 +197,35 @@ exit();
 
 ##################################################
 function insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) {
-	$item = '';
+	$return_this = array(
+		'unlisub'	=>	FALSE,
+		'item'		=>	'',
+		'end_time'	=>	0
+	);
+	
 	$gid = 0;
 	foreach ( $grabs as $row ) {
-		$item = $row['keyword'];
+		$return_this['item'] = $row['keyword'];
 		$gid = $row['gid'];
 	}
-	$grab_bag_table = 'grab_' . $item . '_' . $gid;
-	
-	$end_time = null;
-	
+	$grab_bag_table = 'grab_' . $return_this['item'] . '_' . $gid;
+		
 	if ( $unlisub = is_unlisub( $sender) ) {
 		// If the sender is an unlisub, add one full day after end_time in unlisub table
-		$end_time = date( "Y-m-d H:i:s", strtotime($unlisub['end_time'] . ' + 1 day') );
-		$query = "UPDATE `unlisubs` SET `end_time` = '". $end_time ."' WHERE `msisdn` = '" . $sender . "' AND `grab_bag_table` = '" . $grab_bag_table . "'";
+		$return_this['end_time'] = date( "Y-m-d H:i:s", strtotime($unlisub['end_time'] . ' + 1 day') );
+		$return_this['unlisub'] = TRUE;
+		$query = "UPDATE `unlisubs` SET `end_time` = '". $return_this['end_time'] ."' WHERE `msisdn` = '" . $sender . "' AND `grab_bag_table` = '" . $grab_bag_table . "'";
 	} else {
 		// Sender is not unlisub yet, so create a record
 		$start_time = date( "Y-m-d H:i:s", $chg_info['time_recd'] );			
-		$end_time = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
-		$query = "INSERT INTO `unlisubs` SET `msisdn` = '" . $sender . "', `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
+		$return_this['end_time'] = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
+		$query = "INSERT INTO `unlisubs` SET `msisdn` = '" . $sender . "', `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $return_this['end_time'] . "'";
 	}
 	$result = mysql_query( $query );
 	if ( mysql_affected_rows() == -1 ) {
 		return FALSE;
 	} else {
-		return array(
-			'item'		=>	$item,
-			'end_time'	=>	strtotime( $end_time )
-		);
+		return $return_this;
 	}
 }
 ?>
