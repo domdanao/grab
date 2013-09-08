@@ -73,7 +73,7 @@ $bilang = count( $grabs );
 
 
 ##################################################
-if ( empty( $_REQUEST['others'] ) ) 	{
+if ( empty( $_REQUEST['others'] ) ) {
 	// Subscriber did not send item with message
 	// GRAB UNLI
 	if ( $bilang > 1 ) {
@@ -88,6 +88,19 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		$msg .= $REGMSG;
 	} elseif ( $bilang == 1 ) {
 		// Only one item in grab bag
+		// Do sanity check first
+		if ( $no_buy_item = sanity_check( $sender, $grabs ) ) {
+			// Do not allow buying for this grab item
+			list( $the_no_buy_item_keyword, $the_no_buy_item_gid, $the_buy_item_grab_end ) = explode( ":", $no_buy_item );
+			$formatted_grab_end = date( "M j, Y g:i:s A", strtotime( $the_buy_item_grab_end ) );
+			$msg = "GRAB: Covered ka na hanggang matapos grabs for " . strtoupper( $the_no_buy_item_keyword ) . " until " . $formatted_grab_end . " so no need to buy more unli-grabs.";
+			// Not the most elegant, but will work
+			$response['message'] = $SENDSMS['parameters']['message'] = $msg;
+			if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
+			print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+			exit();
+		}
+		
 		// Register subscriber for grab
 		// Set up charging
 		$val = '250';	// SET TO PROPER PRICE!!!
@@ -237,16 +250,20 @@ function insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) {
 	);
 	
 	$gid = 0;
+	$grab_end_time = '';
+	$grab_end_time_stamp = 0;
 	foreach ( $grabs as $row ) {
 		$return_this['item'] = $row['keyword'];
 		$gid = $row['gid'];
+		$grab_end_time = $row['grab_end'];	# Datetime format
+		$grab_end_time_stamp = strtotime( $grab_end_time );
 	}
 	$grab_bag_table = 'grab_' . $return_this['item'] . '_' . $gid;
 		
 	if ( $unlisub = is_unlisub( $sender) ) {
 		// If the sender is an unlisub, add one full day after end_time in unlisub table
-		$end_time = date( "Y-m-d H:i:s", strtotime($unlisub['end_time'] . ' + 1 day') );
-		$return_this['end_time'] = strtotime( $end_time );
+		$end_time = date( "Y-m-d H:i:s", strtotime($unlisub['end_time'] . ' + 1 day') );	# Add one day to current end time
+		$return_this['end_time'] = $end_time_stamp = strtotime( $end_time );	# Put end_time as timestamp in return array
 		$return_this['unlisub'] = TRUE;
 		$query = "UPDATE `unlisubs` SET `end_time` = '". $end_time ."' WHERE `msisdn` = '" . $sender . "' AND `grab_bag_table` = '" . $grab_bag_table . "'";
 	} else {
@@ -262,5 +279,29 @@ function insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) {
 	} else {
 		return $return_this;
 	}
+}
+
+
+function sanity_check( $sender, $grabs ) {
+	/*
+	Subscribers may buy unli time only until the
+	end of the grab time. So if a subscriber is still
+	trying to buy unli time for a grab item even if
+	his unli-grab time stamp for that item already is
+	beyond the grab item's end time, do not allow the buy.
+	*/
+	$no_more_buys = array();
+	$unlisub = is_unlisub( $sender );
+	foreach( $grabs as $row ) {
+		$item = $row['keyword'];
+		$gid = $row['gid'];
+		$grab_end = $row['grab_end'];
+		$grab_end_timestamp = strtotime($row['grab_end']);
+		$unlisub_end_timestamp = strtotime($unlisub['end_time']);
+		if ( $unlisub_end_timestamp > $grab_end_timestamp ) {
+			$no_more_buys[] = $gid.':'.$item.':'.$grab_end;
+		}
+	}
+	return $no_more_buys;
 }
 ?>
