@@ -212,14 +212,16 @@ function insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) {
 		
 	if ( $unlisub = is_unlisub( $sender) ) {
 		// If the sender is an unlisub, add one full day after end_time in unlisub table
-		$return_this['end_time'] = date( "Y-m-d H:i:s", strtotime($unlisub['end_time'] . ' + 1 day') );
+		$end_time = date( "Y-m-d H:i:s", strtotime($unlisub['end_time'] . ' + 1 day') );
+		$return_this['end_time'] = strtotime( $end_time );
 		$return_this['unlisub'] = TRUE;
-		$query = "UPDATE `unlisubs` SET `end_time` = '". $return_this['end_time'] ."' WHERE `msisdn` = '" . $sender . "' AND `grab_bag_table` = '" . $grab_bag_table . "'";
+		$query = "UPDATE `unlisubs` SET `end_time` = '". $end_time ."' WHERE `msisdn` = '" . $sender . "' AND `grab_bag_table` = '" . $grab_bag_table . "'";
 	} else {
 		// Sender is not unlisub yet, so create a record
 		$start_time = date( "Y-m-d H:i:s", $chg_info['time_recd'] );			
-		$return_this['end_time'] = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
-		$query = "INSERT INTO `unlisubs` SET `msisdn` = '" . $sender . "', `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $return_this['end_time'] . "'";
+		$end_time = date( "Y-m-d H:i:s", strtotime($start_time . ' + 1 day') );
+		$return_this['end_time'] = strtotime( $end_time );
+		$query = "INSERT INTO `unlisubs` SET `msisdn` = '" . $sender . "', `grab_bag_table` = '" . $grab_bag_table . "', `start_time` = '" . $start_time . "', `end_time` = '" . $end_time . "'";
 	}
 	$result = mysql_query( $query );
 	if ( mysql_affected_rows() == -1 ) {
