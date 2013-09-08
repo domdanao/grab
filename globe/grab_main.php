@@ -127,6 +127,10 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 		// Time that charging service returned a reply
 		// This will be the time that will be entered as start_time
 		$charge_time = $CHARGE_IT['time_recd'];
+		if ( $an_unli_sub ) {
+			$charge_time = microtime( TRUE );
+			$response['charge'] = 0;
+		}
 		// Format: Dec 25, 2013 12:30:12
 		$charge_time_friendly = date( "M j, Y H:i:s", $charge_time );
 
