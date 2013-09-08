@@ -21,7 +21,7 @@ $charge_val = 250;
 
 ##################################################
 // DEFAULT CHARGING BEHAVIOR (PROD: TRUE)
-$do_charge = FALSE;
+$do_charge = TRUE;
 
 
 ##################################################
@@ -72,7 +72,7 @@ $response = array(
 	'response'	=>	'',
 	'reason'	=>	'',
 	'message'	=>	'',
-	'charge'	=>	0
+	'charge'	=>	$charge_val
 );
 
 
@@ -146,11 +146,11 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 				$cur_msisdn = ''; # Variable for current holder's msisdn
 
 				if ( mysql_num_rows( $result ) ) {
-					$row = mysql_fetch_assoc($result);
+					$row = mysql_fetch_assoc( $result );
 					
 					$cur_msisdn = $row['msisdn'];
 
-					if ($row['msisdn'] == $sender) {
+					if ( $row['msisdn'] == $sender ) {
 						// Charge here!
 						// Sub holds the item, so let's just tell him he still holds it and not insert his grab in the DB
 						$totalholdtime = total_hold_time( $row['msisdn'], $grab_action_table, $charge_time );
@@ -165,9 +165,10 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 						$SENDCHARGE['parameters']['charge'] = $charge_val;
 						
 						if ( charge_request( $SENDCHARGE ) ) {
-							sms_mt_request( $SENDSMS );							
+							$response['response'] = 'OK';
+							$response['reason'] = 'Grab try by item holder/';
+							if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';							
 						}
-
 						exit();
 						
 					} else {
@@ -193,7 +194,7 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['mobtel'] = $cur_msisdn;
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['txid'] = $tran_id;
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['mo_id'] = $mo_id;
-						sms_mt_request( $SENDSMS_FOR_PREVIOUS_HOLDER );
+						if ( sms_mt_request( $SENDSMS_FOR_PREVIOUS_HOLDER ) ) $response['reason'] .= 'SMS sent (previous holder):';
 					}
 				}
 				
@@ -223,8 +224,14 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 
 }
 
-$SENDSMS['parameters']['message'] = $message;
-sms_mt_request( $SENDSMS );
 
+##################################################
+// Send the SMS MT
+$response['message'] = $SENDSMS['parameters']['message'] = $message;
+if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
+
+print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+
+##################################################
 exit();
 ?>
