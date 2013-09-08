@@ -153,12 +153,25 @@ if ( empty( $_REQUEST['others'] ) ) {
 		if ( $unlisub = is_unlisub( $sender ) ) {
 			// This block for handling subscribers who have unlimited grabs
 			// Time left
-			$end_time = strtotime( $unlisub['end_time'] );
-			$time_now = time();
-			$time_left = $end_time - $time_now;
-			$time_left_duration = duration_find( $time_left );
-			$time_left_formatted = duration_out_plain($time_left_duration);
-			$msg = "GRAB: Unlimited ang grabs mo hanggang " . date( "M j, Y g:i:s A", $end_time ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nPara malaman mo gadgets up for grabs, txt GRAB BAG to $INLA. $BP1" . $REGMSG;
+			if ( $bilang > 1 ) {
+				$msg = "GRAB: U have unlimited grabs sa:\n\n";
+				foreach ( $unlisub as $row ) {
+					// Parse grab bag table
+					list( $grabword, $keyword, $gid ) = explode( "_", $row['grab_bag_table'] );
+					$end_time_stamp = strtotime( $row['end_time'] );
+					$end_time_formatted = date( "n/j/Y h:i:s A", $end_time_stamp );
+					$msg .=  strtotupper( $keyword ) . "(until $end_time_formatted)\n";
+				}
+				$msg .= $REGMSG;
+			} elseif ( $bilang == 1 ) {
+				list( $grabword, $keyword, $gid ) = explode( "_", $unlisub['grab_bag_table'] );
+				$end_time = strtotime( $unlisub['end_time'] );
+				$time_now = time();
+				$time_left = $end_time - $time_now;
+				$time_left_duration = duration_find( $time_left );
+				$time_left_formatted = duration_out_plain($time_left_duration);
+				$msg = "GRAB: Unlimited grabs mo sa " . strtoupper( $keyword ) . " hanggang " . date( "M j, Y g:i:s A", $end_time ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nPara malaman mo gadgets up for grabs, txt GRAB BAG to $INLA. $BP1" . $REGMSG;
+			}
 		} else {
 			// Sub is not an unli-grabber
 			$item = '<item>';
@@ -167,7 +180,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 					$item = $row['keyword'];
 				}
 			}
-			$msg = "GRAB: Di pa unlimited ang grabs mo! Txt GRAB UNLI " . strtotupper( $item ) . " to $INLA to register for unlimited grabs. (P15 for 24hr validity)" . $REGMSG;
+			$msg = "GRAB: Di pa unlimited grabs mo! Txt GRAB UNLI " . strtotupper( $item ) . " to $INLA to register for unlimited grabs. (P15 for 24hr validity)" . $REGMSG;
 		}
 	} else {
 		// Subscriber sent GRAB UNLI <potential_item>
