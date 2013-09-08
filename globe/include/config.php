@@ -45,6 +45,15 @@ $KEYWORDS_PARAM = array(
 	'unli'	=> array( 'unli' )
 	);
 
+// For checking unli subscription validity
+$KEYWORDS_UNLI = array(
+	'check',
+	'time',
+	'balance',
+	'bal',
+	'validity'
+	);
+
 
 ##################################################
 // LOGGING
