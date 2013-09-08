@@ -165,12 +165,20 @@ if ( empty( $_REQUEST['others'] ) ) {
 				$msg .= $REGMSG;
 			} elseif ( $bilang == 1 ) {
 				list( $grabword, $keyword, $gid ) = explode( "_", $unlisub['grab_bag_table'] );
-				$end_time = strtotime( $unlisub['end_time'] );
+				
+				$fin_end_time = 0;
+				if ( $sanity = sanity_check( $sender, $grabs ) ) {
+					list( $gid, $item, $grab_end ) = explode( "/", $sanity[0]);
+					$fin_end_time = strtotime( $grab_end );
+				} else {
+					$fin_end_time = strtotime( $unlisub['end_time'] );
+				}
+				
 				$time_now = time();
-				$time_left = $end_time - $time_now;
+				$time_left = $fin_end_time - $time_now;
 				$time_left_duration = duration_find( $time_left );
 				$time_left_formatted = duration_out_plain($time_left_duration);
-				$msg = "GRAB: Unlimited grabs mo sa " . strtoupper( $keyword ) . " hanggang " . date( "M j, Y g:i:s A", $end_time ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nPara malaman mo gadgets up for grabs, txt GRAB BAG to $INLA. $BP1" . $REGMSG;
+				$msg = "GRAB: Unlimited grabs mo sa " . strtoupper( $keyword ) . " until " . date( "M j, Y g:i:s A", $fin_end_time ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nPara malaman mo gadgets up for grabs, txt GRAB BAG to $INLA. $BP1" . $REGMSG;
 			}
 		} else {
 			// Sub is not an unli-grabber
