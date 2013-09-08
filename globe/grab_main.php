@@ -207,7 +207,7 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 				// Table is not yet populated with grabs, so populate it now
 				$insert = "INSERT INTO `" . $grab_action_table . "` ( `msisdn`, `grab_time` ) VALUES ( '$sender', $charge_time )";
 				$insert_result = mysql_query( $insert );
-				$response['query'] = $insert;
+				// $response['query'] = $insert;
 
 			}
 			
