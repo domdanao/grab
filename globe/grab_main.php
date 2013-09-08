@@ -195,12 +195,16 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 						$totalholdtime = total_hold_time( $row['msisdn'], $grab_action_table );
 						$duration = duration_find( $totalholdtime );
 						$duration_out = duration_out( $duration );
-						$response['message2'] = $SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['message'] = "[GRAB A GADGET Free Alert]\n\nNaku! may nakaagaw na ng $the_item. Total hold time as of $charge_time_friendly: $duration_out.\n\nWag ka pumayag dude! I-grab mo uli, txt GRAB $the_item sa $INLA. $BP1";
+						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['message'] = "[GRAB A GADGET Free Alert]\n\nNaku! may nakaagaw na ng $the_item. Total hold time as of $charge_time_friendly: $duration_out.\n\nWag ka pumayag dude! I-grab mo uli, txt GRAB $the_item sa $INLA. $BP1";
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['mobtel'] = $cur_msisdn;
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['txid'] = $tran_id;
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['mo_id'] = $mo_id;
 						$response['sendsms2'] = $SENDSMS_FOR_PREVIOUS_HOLDER;
-						if ( sms_mt_request( $SENDSMS_FOR_PREVIOUS_HOLDER ) ) $response['reason2'] = 'SMS sent (previous holder):';
+						if ( $prev_holder = sms_mt_request( $SENDSMS_FOR_PREVIOUS_HOLDER ) ) {
+							$response['reason2'] = 'SMS sent (previous holder):';
+						} else {
+							$response['reason2'] = 'SMS request failure';
+						}
 					}
 				}
 				
@@ -214,7 +218,8 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 			}
 			
 			$message = "GRAB: Ikaw na ngayon may hawak ng $the_item (as of $charge_time_friendly).\n\nMagsubscribe sa GRAB A GADGET alerts para updated ka daily on your grab time, grab tips o upcoming items. Txt ON GRAB to $INLA. P2.50/alert";
-
+			$response['response'] = 'OK';
+			
 		} else {
 
 			// Subscriber probably has no load, so send him notice
