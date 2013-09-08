@@ -113,7 +113,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 					$intro_msg = 'Nadagdagan ng 24hrs unli-grab time mo sa';
 					$until_msg = 'na ngayon hanggang';
 				}
-				$msg = "GRAB: $intromsg " . $item_uppercase . ", $until_msg " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
+				$msg = "GRAB: $intro_msg " . $item_uppercase . ", $until_msg " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';				
 			} else {
