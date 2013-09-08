@@ -99,7 +99,14 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
 				// Set up the message
 				$item_uppercase = strtoupper( $update_or_insert['item'] );
-				$msg = "GRAB: Unlimited na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
+
+				$end_time = strtotime( $update_or_insert['end_time'] );
+				$time_now = time();
+				$time_left = $end_time - $time_now;
+				$time_left_duration = duration_find( $time_left );
+				$time_left_formatted = duration_out_plain($time_left_duration);
+				
+				$msg = "GRAB: Unlimited na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';				
 			} else {
