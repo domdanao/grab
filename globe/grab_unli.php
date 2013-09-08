@@ -95,6 +95,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 			$formatted_grab_end = date( "M j, Y g:i:s A", strtotime( $the_buy_item_grab_end ) );
 			$msg = "GRAB: Covered ka na hanggang matapos grabs for " . strtoupper( $the_no_buy_item_keyword ) . " until " . $formatted_grab_end . " so no need to buy more unli-grabs.\n\nTxt GRAB " . strtoupper( $the_no_buy_item_keyword ) . " to $INLA para mabili mo ito nang P88 only!";
 			// Not the most elegant, but will work
+			$response['charge'] = '0';
 			$response['message'] = $SENDSMS['parameters']['message'] = $msg;
 			if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 			print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
