@@ -39,7 +39,7 @@ function is_registered( $msisdn ) {
 function is_unlisub( $msisdn ) {
 	global $dblink;
 	$timenow = date( "Y-m-d H:i:s" );
-	$result = mysql_query( "SELECT * FROM `unlisubs` WHERE `msisdn` = '" . $msisdn . "' AND ('" . $timenow . "' BETWEEN `time_start` AND `time_end`)" );
+	$result = mysql_query( "SELECT * FROM `unlisubs` WHERE `msisdn` = '" . $msisdn . "' AND ('" . $timenow . "' BETWEEN `start_time` AND `end_time`)" );
 	if ( mysql_num_rows( $result ) ) {
 		return mysql_fetch_assoc( $result );
 	} else {
