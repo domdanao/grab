@@ -162,6 +162,23 @@ function duration_out( $array ) {
 
 
 ##################################################
+// Print duration properly, with no microseconds
+function duration_out_plain( $array ) {
+	$ret = array();
+	$added = FALSE;
+	foreach ( $array as $k => $v ) {
+		if ( $v > 0 || $added ) {
+			$added = TRUE;
+			// if ( $k == 'sec' ) $v = number_format($v, 4, '.', ',');
+			if ( $v > 1 ) $k .= 's';
+			$ret[] = $v . $k;
+		}
+	}
+	return join(" ", $ret);
+}
+
+
+##################################################
 // Access HTTP URL
 function hit_http_url( $url, $data, $method = 'post', $timeout = 15 ) {
 	$ch = curl_init();

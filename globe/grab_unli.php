@@ -99,7 +99,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
 				// Set up the message
 				$item_uppercase = strtoupper( $update_or_insert['item'] );
-				$msg = "GRAB: Unli na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\na, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
+				$msg = "GRAB: Unli na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';				
 			} else {
@@ -124,8 +124,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			$time_now = time();
 			$time_left = $end_time - $time_now;
 			$time_left_duration = duration_find( $time_left );
-			$time_left_formatted = duration_out($time_left_duration);
-			$msg = "GRAB: Unlimited ang grabs mo hanggang " . date( "M n, Y g:i:s A", $end_time ) . ".\nTime left: " . $time_left_formatted . ". Para malaman mo gadgets up for grabs, txt GRAB BAG to $INLA. $BP1" . $REGMSG;
+			$time_left_formatted = duration_out_plain($time_left_duration);
+			$msg = "GRAB: Unlimited ang grabs mo hanggang " . date( "M n, Y g:i:s A", $end_time ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nPara malaman mo gadgets up for grabs, txt GRAB BAG to $INLA. $BP1" . $REGMSG;
 		} else {
 			// Sub is not an unli-grabber
 			$item = '<item>';
