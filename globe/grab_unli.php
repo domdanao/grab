@@ -98,7 +98,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			// Charging is successful
 			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
 				// Set up the message
-				$msg = "GRAB: Unli na grabs mo sa " . strtoupper( $update_or_insert['item'] ) . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+				$item_uppercase = strtoupper( $update_or_insert['item'] );
+				$msg = "GRAB: Unli na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\na, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';				
 			} else {
@@ -159,7 +160,8 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 				// Charge success
 				if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
 					// Set up the message
-					$msg = "GRAB: Unli na grabs mo sa " . strtoupper( $update_or_insert['item'] ) . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+					$item_uppercase = strtoupper( $update_or_insert['item'] );
+					$msg = "GRAB: Unli na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
 					$response['response'] = 'OK';
 					$response['reason'] = 'Charge success ' . $val . '/';
 				}
