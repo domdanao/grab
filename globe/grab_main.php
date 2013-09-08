@@ -195,6 +195,7 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 						$totalholdtime = total_hold_time( $row['msisdn'], $grab_action_table );
 						$duration = duration_find( $totalholdtime );
 						$duration_out = duration_out( $duration );
+						$SENDSMS_FOR_PREVIOUS_HOLDER['url'] = 'http://180.87.143.49:8888/grab/globe/sendsms.php';
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['message'] = "GRAB A GADGET Free Alert:\n\nNaku! may nakaagaw na ng $the_item. Total hold time as of $charge_time_friendly: $duration_out.\n\nWag ka pumayag dude! I-grab mo uli, txt GRAB $the_item sa $INLA. $BP1";
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['mobtel'] = $cur_msisdn;
 						$SENDSMS_FOR_PREVIOUS_HOLDER['parameters']['txid'] = $tran_id;
