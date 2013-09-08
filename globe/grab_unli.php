@@ -208,6 +208,20 @@ if ( empty( $_REQUEST['others'] ) ) {
 
 		if ( $match ) {
 			// Valid request because there is a matching keyword
+			// Do sanity check first
+			if ( $no_buy_item = sanity_check( $sender, $grabs ) ) {
+				// Do not allow buying for this grab item
+				list( $the_no_buy_item_gid, $the_no_buy_item_keyword, $the_buy_item_grab_end ) = explode( "/", $no_buy_item[0] );
+				$formatted_grab_end = date( "M j, Y g:i:s A", strtotime( $the_buy_item_grab_end ) );
+				$msg = "GRAB: Covered ka na hanggang matapos grabs for " . strtoupper( $the_no_buy_item_keyword ) . " until " . $formatted_grab_end . " so no need to buy more unli-grabs.\n\nTxt GRAB " . strtoupper( $the_no_buy_item_keyword ) . " to $INLA para mabili mo ito nang P88 only!";
+				// Not the most elegant, but will work
+				$response['charge'] = '0';
+				$response['message'] = $SENDSMS['parameters']['message'] = $msg;
+				if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
+				print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+				exit();
+			}
+			
 			// Register subscriber for grab
 			// Set up charging, P15 (1500) or P20 (2000)
 			$val = '250';	//// SET PROPER PRICE!!!
@@ -243,9 +257,8 @@ if ( empty( $_REQUEST['others'] ) ) {
 			}	
 		} else {
 			// Invalid request
-			$val = '250';
 			if ( charge_request( $SENDCHARGE ) ) {
-				$msg = "Sorry, u sent an invalid request.\n\nPara unli grabs mo for 24hrs, send GRAB UNLI <item> to $INLA.\n\nPara malaman kung ano pwede mo i-grab, send GRAB BAG to $INLA. $BP1";
+				$msg = "Sorry, u sent an invalid request.\n\nPara unlimited grabs mo, send GRAB UNLI <item> to $INLA. P15/24hr validity\n\nPara malaman kung ano pwede mo i-grab, send GRAB BAG to $INLA. $BP1";
 				$response['response'] = 'NOK';
 				$response['reason'] = 'Invalid request';
 			}
