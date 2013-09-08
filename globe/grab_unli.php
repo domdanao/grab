@@ -101,9 +101,9 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 				// Item
 				$item_uppercase = strtoupper( $update_or_insert['item'] );
 				// Time left
-				$end_time = strtotime( $update_or_insert['end_time'] );
+				$the_end_time = $update_or_insert['end_time'];
 				$time_now = time();
-				$time_left = $end_time - $time_now;
+				$time_left = $the_end_time - $time_now;
 				$time_left_duration = duration_find( $time_left );
 				$time_left_formatted = duration_out_plain($time_left_duration);
 				// Message proper
