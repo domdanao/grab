@@ -82,7 +82,7 @@ if ( $num = count( $running ) ) {
 	##################################################
 	// Go through the arrays
 	if ( count( $grab_item_entry ) ) {
-		$parts = explode( "|", $grab_item_entry );
+		$parts = explode( "|", $grab_item_entry[0] );
 		$msg = "GRAB: " . $parts[1] . " mo nang hawak ang " . $parts[0] . "\n\nPwede mo ‘to mbili for P88 only basta ikaw ang pnkamtagal na may hawak nito!\n\nFor more info txt HELP GRAB to $INLA. $BP1";
 	} elseif ( count( $grab_entries ) ) {
 		$msg = "GRAB: Heto ang grab time record mo for the ff grab items:\n\n";
