@@ -98,8 +98,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			// Charging is successful
 			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
 				// Set up the message
-				$upper_item = strtoupper( $update_or_insert['item'] );
-				$msg = "GRAB: Unli na grabs mo sa $upper_item, hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+				$msg = "GRAB: Unli na grabs mo sa " . strtoupper( $update_or_insert['item'] ) . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';				
 			} else {
@@ -139,7 +138,7 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 			// Charge success
 			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
 				// Set up the message
-				$msg = "GRAB: Unli na grabs mo sa " . strtoupper( $update_or_insert['item'] ) . ", hanggang $unli_time_end.\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
+				$msg = "GRAB: Unli na grabs mo sa " . strtoupper( $update_or_insert['item'] ) . ", hanggang " . date( "M n, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB <item> to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';
 			}
@@ -200,7 +199,7 @@ function insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) {
 	} else {
 		return array(
 			'item'		=>	$item,
-			'end_time'	=>	$end_time
+			'end_time'	=>	strtotime( $end_time )
 		);
 	}
 }
