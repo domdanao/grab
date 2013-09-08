@@ -150,6 +150,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 	if ( in_array( $others, $KEYWORDS_UNLI ) ) {
 		// Subscriber sent GRAB UNLI CHECK or GRAB UNLI TIME, OR SOME EQUIVALENT
 		// Is this inquiry free?
+		$val = '0';
 		if ( $unlisub = is_unlisub( $sender ) ) {
 			// This block for handling subscribers who have unlimited grabs
 			// Time left
