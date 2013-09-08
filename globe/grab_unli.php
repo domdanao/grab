@@ -151,6 +151,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 		// Subscriber sent GRAB UNLI CHECK or GRAB UNLI TIME, OR SOME EQUIVALENT
 		// Is this inquiry free?
 		$val = '0';
+		$response['charge'] = $val;
 		if ( $unlisub = is_unlisub( $sender ) ) {
 			// This block for handling subscribers who have unlimited grabs
 			// Time left
