@@ -169,7 +169,7 @@ function duration_out_plain( $array ) {
 	foreach ( $array as $k => $v ) {
 		if ( $v > 0 || $added ) {
 			$added = TRUE;
-			if ( $k == 'sec' ) $v = settype( $v, "integer" );
+			if ( $k == 'sec' ) settype( $v, "integer" );
 			if ( $v > 1 ) $k .= 's';
 			$ret[] = $v . $k;
 		}
