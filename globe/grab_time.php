@@ -115,10 +115,10 @@ if ( $do_charge ) {
 	if ( charge_request( $SENDCHARGE ) ) {
 		// Send the SMS
 		$response['response'] = 'OK';
-		$response['reason'] = 'Charge success';
+		$response['reason'] = 'Charge success ' . $charge_val . '/';
 		$response['message'] = $msg;
 		$response['charge'] = $charge_val;
-		sms_mt_request( $SENDSMS );
+		if ( sms_mt_request( $SENDSMS ) ) $charge['reason'] .= 'SMS sent';
 	}
 } else {
 	// No charging necessary, just send the SMS
@@ -126,7 +126,7 @@ if ( $do_charge ) {
 	$response['reason'] = 'OK';
 	$response['message'] = $msg;
 	$response['charge'] = 0;
-	sms_mt_request( $SENDSMS );
+	if ( sms_mt_request( $SENDSMS ) ) $charge['reason'] = 'SMS sent';
 }
 
 print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
