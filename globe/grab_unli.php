@@ -96,7 +96,89 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 		// Send the charge
 		if ( $chg_info = charge_request( $SENDCHARGE ) ) {
 			// Charging is successful
-			if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
+			$update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink );
+			// Set up the message
+			// Item
+			$item_uppercase = strtoupper( $update_or_insert['item'] );
+			// Time left
+			$the_end_time = $update_or_insert['end_time'];
+			$time_now = time();
+			$time_left = $the_end_time - $time_now;
+			$time_left_duration = duration_find( $time_left );
+			$time_left_formatted = duration_out_plain($time_left_duration);
+			// Message proper
+			$intro_msg = 'Unlimited na grabs mo sa';
+			$until_msg = 'hanggang';
+			if ( $update_or_insert['unlisub'] ) {
+				$intro_msg = 'Nadagdagan ng 24hrs unli-grab time mo sa';
+				$until_msg = 'na ngayon hanggang';
+			}
+			$msg = "GRAB: $intro_msg " . $item_uppercase . ", $until_msg " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
+			$response['response'] = 'OK';
+			$response['reason'] = 'Charge success ' . $val . '/';				
+		} else {
+			// Charge failure
+			$msg = "GRAB: Sorry, kulang balance mo sa iyong account.";
+			$response['response'] = 'NOK';
+			$response['reason'] = 'Charge failed';
+		}
+	} else {
+		// No item in grab bag
+		$msg = "GRAB:\nChill ka lang. Check back later to know when we have stuff in the Grab Bag.";
+	}
+} else {
+	/*
+	The subscriber sent GRAB UNLI <SOMETHING>
+	KEYWORDS_UNLI contains the words for unli-time check,
+	and if there is a match in the array, we do balance check.
+	Otherwise, we assume the subscriber was buying unli time
+	for a particular item, eg, GRAB UNLI IPAD.
+	*/
+	if ( in_array( $others, $KEYWORDS_UNLI ) ) {
+		// Subscriber sent GRAB UNLI CHECK or GRAB UNLI TIME, OR SOME EQUIVALENT
+		// Is this inquiry free?
+		if ( $unlisub = is_unlisub( $sender ) ) {
+			// This block for handling subscribers who have unlimited grabs
+			// Time left
+			$end_time = strtotime( $unlisub['end_time'] );
+			$time_now = time();
+			$time_left = $end_time - $time_now;
+			$time_left_duration = duration_find( $time_left );
+			$time_left_formatted = duration_out_plain($time_left_duration);
+			$msg = "GRAB: Unlimited ang grabs mo hanggang " . date( "M j, Y g:i:s A", $end_time ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nPara malaman mo gadgets up for grabs, txt GRAB BAG to $INLA. $BP1" . $REGMSG;
+		} else {
+			// Sub is not an unli-grabber
+			$item = '<item>';
+			if ( $bilang == 1 ) {
+				foreach( $grabs as $row ) {
+					$item = $row['keyword'];
+				}
+			}
+			$msg = "GRAB: Di pa unlimited ang grabs mo! Txt GRAB UNLI " . strtotupper( $item ) . " to $INLA to register for unlimited grabs. (P15 for 24hr validity)" . $REGMSG;
+		}
+	} else {
+		// Subscriber sent GRAB UNLI <potential_item>
+		// Check if there is a match, search grabs array
+		$match = FALSE;
+		$item = '';
+		foreach ( $grabs as $row ) {
+			if ( $row['keyword'] == $others ) {
+				$match = TRUE;
+				$item = $row['keyword'];
+				break;	// End loop if already true
+			}
+		}
+
+		if ( $match ) {
+			// Valid request because there is a matching keyword
+			// Register subscriber for grab
+			// Set up charging, P15 (1500) or P20 (2000)
+			$val = '250';	//// SET PROPER PRICE!!!
+			$SENDCHARGE['parameters']['charge'] = $val;
+			// Send the charge
+			if ( $chg_info = charge_request( $SENDCHARGE ) ) {
+				// Charging is successful
+				$update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink );
 				// Set up the message
 				// Item
 				$item_uppercase = strtoupper( $update_or_insert['item'] );
@@ -116,70 +198,6 @@ if ( empty( $_REQUEST['others'] ) ) 	{
 				$msg = "GRAB: $intro_msg " . $item_uppercase . ", $until_msg " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';				
-			} else {
-				// This should never happen, but handle
-			}
-		} else {
-			// Charge failure
-			$msg = "GRAB: Sorry, kulang balance mo sa iyong account.";
-			$response['response'] = 'NOK';
-			$response['reason'] = 'Charge failed';
-		}
-	} else {
-		// No item in grab bag
-		$msg = "GRAB:\nChill ka lang. Check back later to know when we have stuff in the Grab Bag.";
-	}
-} else {
-	if ( in_array( $others, $KEYWORDS_UNLI ) ) {
-		// Subscriber sent GRAB UNLI CHECK or GRAB UNLI TIME, OR SOME EQUIVALENT
-		// Is this inquiry free?
-		if ( $unlisub = is_unlisub( $sender ) ) {
-			// Time left
-			$end_time = strtotime( $unlisub['end_time'] );
-			$time_now = time();
-			$time_left = $end_time - $time_now;
-			$time_left_duration = duration_find( $time_left );
-			$time_left_formatted = duration_out_plain($time_left_duration);
-			$msg = "GRAB: Unlimited ang grabs mo hanggang " . date( "M j, Y g:i:s A", $end_time ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nPara malaman mo gadgets up for grabs, txt GRAB BAG to $INLA. $BP1" . $REGMSG;
-		} else {
-			// Sub is not an unli-grabber
-			$item = '<item>';
-			if ( $bilang == 1 ) {
-				foreach( $grabs as $row ) {
-					$item = $row['keyword'];
-				}
-			}
-			$msg = "GRAB: Di pa unlimited ang grabs mo! Txt GRAB UNLI " . strtotupper( $item ) . " to $INLA to register for unlimited grabs. (P15 for 24hr validity)" . $REGMSG;
-		}
-	} else {
-		// Subscriber sent GRAB UNLI ITEM
-		// Check if there is a match, search grabs array
-		$match = FALSE;
-		$item = '';
-		foreach ( $grabs as $row ) {
-			if ( $row['keyword'] == $others ) {
-				$match = TRUE;
-				$item = $row['keyword'];
-				break;	// End loop if already true
-			}
-		}
-
-		if ( $match ) {
-			// Valid request because there is a matching keyword
-			// Register subscriber for grab
-			// Set up charging, P15 (1500) or P20 (2000)
-			$val = '250';	//// SET PROPER PRICE!!!
-			$SENDCHARGE['parameters']['charge'] = $val;
-			// Send the charge
-			if ( $chg = charge_request( $SENDCHARGE ) ) {
-				// Charge success
-				if ( $update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink ) ) {
-					// Set up the message
-					$item_uppercase = strtoupper( $update_or_insert['item'] );
-					$msg = "GRAB: Unli na grabs mo sa " . $item_uppercase . ", hanggang " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
-					$response['response'] = 'OK';
-					$response['reason'] = 'Charge success ' . $val . '/';
-				}
 			} else {
 				// Charge failure
 				$msg = "GRAB: Sorry, kulang balance mo sa iyong account.";
