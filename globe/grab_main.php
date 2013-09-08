@@ -212,6 +212,7 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 
 			// Subscriber probably has no load, so send him notice
 			$message = "GRAB: Sorry, you do not have enough balance or not subscribed UNLIGRAB.";
+			$response['charge'] = '0';
 			
 		}
 	
@@ -221,7 +222,8 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 	
 	// There is no such item in the Grab Bag
 	$message = "GRAB: Sorry, walang ganyang item (" . strtoupper( $param ) . ") sa Grab Bag ngayon.\nText GRAB BAG to $INLA para makita mo kung ano laman ng Grab Bag. $BP1";
-
+	$response['charge'] = '0';
+	
 }
 
 
