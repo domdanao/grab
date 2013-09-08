@@ -67,7 +67,7 @@ if ( $num = count( $running ) ) {
 		// Figure out the table name
 		$table = "grab_".$row['keyword']."_".$row['gid'];
 		// See if sub has grab
-		$grabtime = grab_time( $sender, $table, $dblink );
+		$grabtime = total_hold_time( $sender, $table, $dblink );
 		if ( $grabtime ) {
 			if ( !empty( $_REQUEST['others'] ) ) {
 				$grab_entries = array();
