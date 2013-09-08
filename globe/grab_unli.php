@@ -91,9 +91,9 @@ if ( empty( $_REQUEST['others'] ) ) {
 		// Do sanity check first
 		if ( $no_buy_item = sanity_check( $sender, $grabs ) ) {
 			// Do not allow buying for this grab item
-			list( $the_no_buy_item_keyword, $the_no_buy_item_gid, $the_buy_item_grab_end ) = explode( ":", $no_buy_item[0] );
+			list( $the_no_buy_item_gid, $the_no_buy_item_keyword, $the_buy_item_grab_end ) = explode( ":", $no_buy_item[0] );
 			$formatted_grab_end = date( "M j, Y g:i:s A", strtotime( $the_buy_item_grab_end ) );
-			$msg = "GRAB: Covered ka na hanggang matapos grabs for " . strtoupper( $the_no_buy_item_keyword ) . " until " . $formatted_grab_end . " so no need to buy more unli-grabs.";
+			$msg = "GRAB: Covered ka na hanggang matapos grabs for " . strtoupper( $the_no_buy_item_keyword ) . " until " . $formatted_grab_end . " so no need to buy more unli-grabs. " . $no_buy_item[0];
 			// Not the most elegant, but will work
 			$response['message'] = $SENDSMS['parameters']['message'] = $msg;
 			if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
