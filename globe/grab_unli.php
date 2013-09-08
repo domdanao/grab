@@ -188,7 +188,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 					$item = $row['keyword'];
 				}
 			}
-			$msg = "GRAB: Di pa unlimited grabs mo! Txt GRAB UNLI " . strtotupper( $item ) . " to $INLA to register for unlimited grabs. (P15 for 24hr validity)" . $REGMSG;
+			$msg = "GRAB: Di pa unlimited grabs mo! Txt GRAB UNLI " . strtoupper( $item ) . " to $INLA to register for unlimited grabs. (P15 for 24hr validity)" . $REGMSG;
 		}
 	} else {
 		// Subscriber sent GRAB UNLI <potential_item>
