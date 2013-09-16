@@ -432,6 +432,13 @@ function sms_mt_request( $sendsms ) {
 	}
 }
 
+##################################################
+// Send content
+function get_content() {
+	include "content.php";
+	shuffle($CONTENT);
+	return $CONTENT[0];
+}
 
 ##################################################
 ?>
