@@ -283,6 +283,7 @@ if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 
 print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
+
 ##################################################
 exit();
 
