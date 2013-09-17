@@ -51,6 +51,15 @@ if ( !is_registered( $sender, $dblink ) ) {
 }
 
 
+##################################################
+// Content to send
+$SENDCONTENT['url'] = $SENDSMS['url'];
+$SENDCONTENT['parameters']['mobtel'] = $sender;
+$SENDCONTENT['parameters']['mo_id'] = $mo_id;
+$SENDCONTENT['parameters']['txid'] = $tran_id;
+$SENDCONTENT['parameters']['message'] = get_content();
+
+
 /*
 ##################################################
 // Alert message
@@ -243,7 +252,14 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 ##################################################
 // Send the SMS MT
 $response['message'] = $SENDSMS['parameters']['message'] = $message;
-if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
+if ( sms_mt_request( $SENDSMS ) ) {
+	$response['reason'] .= 'SMS sent';
+	if ( $response['response'] == 'OK' ) {
+		if ( sms_mt_request( $SENDCONTENT ) ) {
+			$response['content_status'] = 'Content sent.';
+		}
+	}
+}
 
 print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
