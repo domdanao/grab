@@ -67,6 +67,15 @@ $SENDCHARGE['parameters']['charge'] = $val;
 
 
 ##################################################
+// Content to send
+$SENDCONTENT['url'] = $SENDSMS['url'];
+$SENDCONTENT['parameters']['mobtel'] = $sender;
+$SENDCONTENT['parameters']['mo_id'] = $mo_id;
+$SENDCONTENT['parameters']['txid'] = $tran_id;
+$SENDCONTENT['parameters']['message'] = get_content();
+
+
+##################################################
 // Let's check grab bag
 $grabs = grab_bag( $timenow, $_REQUEST['operator'], $dblink );
 $bilang = count( $grabs );
