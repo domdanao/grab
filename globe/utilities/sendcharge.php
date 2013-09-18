@@ -17,8 +17,9 @@ http://203.177.154.215/2889ZEDCHARGE?CSP_Txid=12121212
 
 // VALUES FOR GLOBE SILENT BILLING
 $CHG_VALS = array(
+	'100'	=>	'GRABPULL1',	// Chargecode for P1.00
 	'250'	=>	'CLUBZHELP',	// Chargecode for P2.50
-	'2000'	=>	'CLUBZHELP'		// Replace with value for P20 chargecode
+	'500'	=>	'GRABPULL5'		// Chargecode for P5.00
 	);
 
 $SENDCHARGE = array(
