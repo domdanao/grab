@@ -66,10 +66,42 @@ if (!$mo_id or !$message or !$txid or !$mobtel) {
 		$response['response'] = 'ERROR';
 		$response['reason'] = 'CURL error ' . $reply['errno'] . '/' . $reply['errtxt'];
 	} else {
-		$response['response'] = 'OK';
-		$response['reason'] = $reply['http_code'];
-		$response['headers'] = $reply['headers'];
-		$response['url'] = $reply['url'];
+		if ($reply['http_code'] !== 200) {
+			// Retry 2
+			$reply2 = hit_http_url($SENDSMS['url'], $SENDSMS['parameters'], 'get');
+			if ($reply2['http_code'] !== 200) {
+				$reply3 = hit_http_url($SENDSMS['url'], $SENDSMS['parameters'], 'get');
+				if ($reply3['http_code'] !== 200) {
+					// Give 
+					$response['response'] = 'NOK';
+					$response['reason'] = $reply['http_code'];
+					$response['headers'] = $reply['headers'];
+					$response['url'] = $reply['url'];
+					$response['try'] = 3;
+				} else {
+					// Try 3 success
+					$response['response'] = 'OK';
+					$response['reason'] = $reply['http_code'];
+					$response['headers'] = $reply['headers'];
+					$response['url'] = $reply['url'];
+					$response['try'] = 3;
+				}
+			} else {
+				// Try 2 success
+				$response['response'] = 'OK';
+				$response['reason'] = $reply['http_code'];
+				$response['headers'] = $reply['headers'];
+				$response['url'] = $reply['url'];				
+				$response['try'] = 2;
+			}
+		} else {
+			// Try 1 success
+			$response['response'] = 'OK';
+			$response['reason'] = $reply['http_code'];
+			$response['headers'] = $reply['headers'];
+			$response['url'] = $reply['url'];			
+			$response['try'] = 1;
+		}
 	}
 }
 
