@@ -40,7 +40,7 @@ if ( !is_registered( $sender ) ) {
 ##################################################
 // INITIALIZE MESSAGE, CHARGE VALUE
 $msg = '';
-$val = '250';
+$val = '500';
 
 
 ##################################################
@@ -113,7 +113,6 @@ if ( empty( $_REQUEST['others'] ) ) {
 		
 		// Register subscriber for grab
 		// Set up charging
-		$val = '250';	// SET TO PROPER PRICE!!!
 		$SENDCHARGE['parameters']['charge'] = $val;
 		
 		// Send the charge
@@ -160,7 +159,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 	if ( in_array( $others, $KEYWORDS_UNLI ) ) {
 		// Subscriber sent GRAB UNLI CHECK or GRAB UNLI TIME, OR SOME EQUIVALENT
 		// Is this inquiry free?
-		$val = '0';
+		$val = 0;
 		$response['charge'] = $val;
 		if ( $unlisub = is_unlisub( $sender ) ) {
 			// This block for handling subscribers who have unlimited grabs
@@ -200,7 +199,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 					$item = $row['keyword'];
 				}
 			}
-			$msg = "GRAB: Di pa unlimited grabs mo! Txt GRAB UNLI " . strtoupper( $item ) . " to $INLA to register for unlimited grabs. (P15 for 24hr validity)" . $REGMSG;
+			$msg = "GRAB: Di pa unlimited grabs mo! Txt GRAB UNLI " . strtoupper( $item ) . " to $INLA to register for unlimited grabs. (P5 for 24hr validity)" . $REGMSG;
 		}
 	} else {
 		// Subscriber sent GRAB UNLI <potential_item>
@@ -232,8 +231,6 @@ if ( empty( $_REQUEST['others'] ) ) {
 			}
 			
 			// Register subscriber for grab
-			// Set up charging, P15 (1500) or P20 (2000)
-			$val = '250';	//// SET PROPER PRICE!!!
 			$SENDCHARGE['parameters']['charge'] = $val;
 			// Send the charge
 			if ( $chg_info = charge_request( $SENDCHARGE ) ) {
@@ -267,7 +264,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 		} else {
 			// Invalid request
 			if ( charge_request( $SENDCHARGE ) ) {
-				$msg = "Sorry, u sent an invalid request.\n\nPara unlimited grabs mo, send GRAB UNLI <item> to $INLA. P15/24hr validity\n\nPara malaman kung ano pwede mo i-grab, send GRAB BAG to $INLA. $BP1";
+				$msg = "Sorry, u sent an invalid request.\n\nPara unlimited grabs mo, send GRAB UNLI <item> to $INLA. P5/24hr validity\n\nPara malaman kung ano pwede mo i-grab, send GRAB BAG to $INLA. $BP1";
 				$response['response'] = 'NOK';
 				$response['reason'] = 'Invalid request';
 			}
