@@ -49,7 +49,7 @@ $response = array(
 
 ##################################################
 // The HELP file
-$message = $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n" .
+/*$message = $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n" .
 	"GRAB REG name/age/address - to be a member and buy items for P88 only\n" .
 	"GRAB UNLI - get 24hrs unlimited grabs (P20/day)\n" .
 	"GRAB UNLI CHECK - check your unlimited grab time\n" .
@@ -59,7 +59,15 @@ $message = $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! 
 	"GRAB TIME <item>  - know how much time u are holding the item\n" .
 	"DTI6597 Promo Period 09/21/13-10/19/13\nCall 7065278 $BP1" .
 	$REGMSG;
+*/
 
+$message = $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n
+	GRAB REG name/age/address – to be a member and buy items for P88 only\n
+	GRAB <ITEM> - grab an item\n
+	GRAB UNLI – unlimited grab 24hrs\n
+	GRAB BAG - list the current items up for grabs all for 88 pesos!\n
+	GRAB TIME  - know how much time u are holding the item DTI6597Promo Pd 09/22/13-10/19/13 Call 7065278\n".
+	$BP1 . $REGMSG;
 
 ##################################################
 // Finish the program
