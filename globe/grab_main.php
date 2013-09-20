@@ -49,6 +49,10 @@ $REGMSG = '';
 if ( !is_registered( $sender, $dblink ) ) {
 	$REGMSG = $NOT_REG;
 }
+if ( is_unlisub( $sender ) ) {
+	$BP1 = '';	
+	$BP2 = '';
+}
 
 
 ##################################################
