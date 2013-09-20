@@ -227,7 +227,8 @@ if ( $numrow = mysql_num_rows( $result ) ) {
 
 			}
 			
-			$message = "GRAB: Ikaw na ngayon may hawak ng $the_item (as of $charge_time_friendly).\n\nMagsubscribe sa GRAB A GADGET alerts para updated ka daily on your grab time, grab tips o upcoming items. Txt ON GRAB to $INLA. P2.50/alert";
+			//$message = "GRAB: Ikaw na ngayon may hawak ng $the_item (as of $charge_time_friendly).\n\nMagsubscribe sa GRAB A GADGET alerts para updated ka daily on your grab time, grab tips o upcoming items. Txt ON GRAB to $INLA. P2.50/alert";
+			$message = "GRAB: Ikaw na ngayon may hawak ng $the_item (as of $charge_time_friendly).\n\n$REGMSG";
 			$response['response'] = 'OK';
 			
 		} else {
