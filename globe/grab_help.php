@@ -57,7 +57,7 @@ $message = $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! 
 	"GRAB BAG - list the current items up for grabs all for 88 pesos!\n" .
 	"ON GRAB - to subscribe to daily updates\n" .
 	"GRAB TIME <item>  - know how much time u are holding the item\n" .
-	"DTI XXXX Promo Period 08/26/13-09/25/13\nCall 7065278 $BP1" .
+	"DTI6597 Promo Period 09/21/13-10/19/13\nCall 7065278 $BP1" .
 	$REGMSG;
 
 
