@@ -12,8 +12,8 @@ if ( $_REQUEST['operator'] !== 'GLOBE' ) {
 require_once 'include/config.php';
 
 ##################################################
-// Charge amount, Php2.50, expressed in centavos
-$charge_val = 250;
+// Charge amount, Php1.00, expressed in centavos
+$charge_val = 100;
 
 
 ##################################################

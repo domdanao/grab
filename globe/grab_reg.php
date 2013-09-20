@@ -16,7 +16,7 @@ require_once 'include/config.php';
 
 ##################################################
 // Charge amount, Php2.50, expressed in centavos
-$charge_val = 250;
+$charge_val = 100;
 
 
 ##################################################
