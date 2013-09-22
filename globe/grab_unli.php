@@ -264,7 +264,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 		} else {
 			// Invalid request
 			if ( charge_request( $SENDCHARGE ) ) {
-				$msg = "Sorry, u sent an invalid request.\n\nPara unlimited grabs mo, send GRAB UNLI <item> to $INLA. P5/24hr validity\n\nPara malaman kung ano pwede mo i-grab, send GRAB BAG to $INLA. $BP1";
+				$msg = "Sorry, u sent an invalid request.\n\nPara unlimited grabs mo, send GRAB UNLI <item> to $INLA. P10/24hr validity\n\nPara malaman kung ano pwede mo i-grab, send GRAB BAG to $INLA. $BP1";
 				$response['response'] = 'NOK';
 				$response['reason'] = 'Invalid request';
 			}
