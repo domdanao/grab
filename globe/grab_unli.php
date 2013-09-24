@@ -60,6 +60,7 @@ $response = array(
 
 ##################################################
 // Charging
+//$SENDCHARGE['url'] = 'http://180.87.143.49:8888/grab/globe/sendcharge2.php';
 $SENDCHARGE['parameters']['mo_id'] = $_REQUEST['mo_id'];
 $SENDCHARGE['parameters']['txid'] = $tran_id;
 $SENDCHARGE['parameters']['mobtel'] = $sender;

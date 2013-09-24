@@ -62,11 +62,11 @@ $response = array(
 */
 
 $message = $SENDSMS['parameters']['message'] = "Welcome to GRAB A GADGET PROMO! Available commands:\n
-	GRAB REG name/age/address – to be a member and buy items for P88 only\n
+	GRAB REG name/age/address - to be a member and buy items for P88 only\n
 	GRAB <ITEM> - grab an item\n
-	GRAB UNLI – unlimited grab 24hrs\n
+	GRAB UNLI - unlimited grab 24hrs\n
 	GRAB BAG - list the current items up for grabs all for 88 pesos!\n
-	GRAB TIME  - know how much time u are holding the item DTI6597Promo Pd 09/22/13-10/19/13 Call 7065278\n".
+	GRAB TIME - know how much time u are holding the item DTI6597Promo Pd 09/22/13-10/19/13 Call 7065278\n".
 	$BP1 . $REGMSG;
 
 ##################################################

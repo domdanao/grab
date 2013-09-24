@@ -118,11 +118,11 @@ $HOW_TO_GRAB = "\n\nGrab an item u want by texting GRAB <item> to $INLA. $BP2";
 // WELCOME MESSAGE
 //$WELCOME_MSG = "Welcome to GRAB A GADGET PROMO! Participating in GRAB means you have read and agree to the Terms and Conditions found at the web site <url> also means you agree to receive free alerts of this service.\n\nFor more info txt HELP GRAB to $INLA.\n\nDTI6597\nCall 7065278. $BP1";
 $WELCOME_MSG = "Welcome to GRAB A GADGET PROMO! Available commands:\n
-	GRAB REG name/age/address – to be a member and buy items for P88 only\n
+	GRAB REG name/age/address - to be a member and buy items for P88 only\n
 	GRAB <ITEM> - grab an item\n
-	GRAB UNLI – unlimited grab 24hrs\n
+	GRAB UNLI - unlimited grab 24hrs\n
 	GRAB BAG - list the current items up for grabs all for 88 pesos!\n
-	GRAB TIME  - know how much time u are holding the item DTI6597Promo Pd 09/22/13-10/19/13 Call 7065278\n".
+	GRAB TIME - know how much time u are holding the item DTI6597Promo Pd 09/22/13-10/19/13 Call 7065278\n".
 	$BP1 . $REGMSG;
 	
 
