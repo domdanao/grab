@@ -235,6 +235,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 			$SENDCHARGE['parameters']['charge'] = $val;
 			// Send the charge
 			if ( $chg_info = charge_request( $SENDCHARGE ) ) {
+				$chg_info2 = charge_request( $SENDCHARGE );
 				// Charging is successful
 				$update_or_insert = insert_or_update_unlisub_table( $grabs, $chg_info, $sender, $dblink );
 				// Set up the message

@@ -368,7 +368,7 @@ function charge_request( $sendcharge ) {
 			'time_recd'		=> $http_end_time,
 			'total_time'	=> $charge_it['total_time'],
 			'body_content'	=> $charge_it['body_content'],
-			'trans_type'	=> 'CHG',
+			'trans_type'	=> 'CHG'.$sendcharge['parameters']['charge'],
 			);
 
 		if ( http_req_rep( $sendcharge_result ) ) {

@@ -257,6 +257,17 @@ elseif
 	$http_params['others'] = $params;
 }
 
+/*
+elseif
+
+// 2ND KEYWORD: TEST
+// GRAB TEST
+( $second_key == 'test' ) {
+	$program_path = $TEST_PATH;
+	$http_params['others'] = $params;
+}
+*/
+
 else {
 	$program_path = $DEFAULT_PATH;
 	$http_params['keyword'] = $main_key;

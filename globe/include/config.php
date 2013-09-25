@@ -97,6 +97,9 @@ $UNLI_PATH = $PROG_BASE . "/grab_unli.php";
 // Default URL
 $DEFAULT_PATH = $PROG_BASE . "/grab_main.php";
 
+// TESTING URL
+$TEST_PATH = $PROG_BASE . "/grab_test.php";
+
 
 ##################################################
 // Boilerplate texts
