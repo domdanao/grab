@@ -164,5 +164,10 @@ $SENDCHARGE = array(
 ##################################################
 $PROGRAM_OWNER = '639152481296';
 
+##################################################
+$BAN_TIME_START = '12:00:01 am';
+$BAN_TIME_END = '6:59:59 am';
+$BAN_MSG = "GRAB: Sorry, walang grab ngayong oras. Nagsisimula ang grab time nang " . date("g:i:s a", strtotime("$BAN_TIME_END + 1sec")) . ". Balik ka later!";
+
 // print "Good";
 ?>

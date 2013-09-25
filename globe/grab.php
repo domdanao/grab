@@ -175,6 +175,21 @@ if ( mysql_affected_rows() == -1 ) {
 }
 
 
+/*
+##################################################
+// Ban time
+$current_time = strtotime('now');
+if ( $current_time > strtotime( $BAN_TIME_START ) && $current_time < strtotime( $BAN_TIME_END ) ) {
+	$SENDSMS['parameters']['mo_id'] = $mo_id;
+	$SENDSMS['parameters']['txid'] = $_REQUEST['motxid'];
+	$SENDSMS['parameters']['message'] = $BAN_MSG;
+	$SENDSMS['parameters']['mobtel'] = $mo_from;
+	// Send the welcome message
+	sms_mt_request( $SENDSMS );
+}
+*/
+
+
 ##################################################
 // First time to send?
 if ( first_send( $mo_from, $dblink ) === FALSE ) {
