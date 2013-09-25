@@ -136,7 +136,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 				$intro_msg = 'Nadagdagan ng 24hrs unli-grab time mo sa';
 				$until_msg = 'na ngayon hanggang';
 			}
-			$msg = "GRAB: $intro_msg " . $item_uppercase . ", $until_msg " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
+			$msg = "GRAB: $intro_msg " . $item_uppercase . ", $until_msg " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA. $BP3" . $REGMSG;
 			$response['response'] = 'OK';
 			$response['reason'] = 'Charge success ' . $val . '/';				
 		} else {
@@ -253,7 +253,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 					$intro_msg = 'Nadagdagan ng 24hrs unli-grab time mo sa';
 					$until_msg = 'na ngayon hanggang';
 				}
-				$msg = "GRAB: $intro_msg " . $item_uppercase . ", $until_msg " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA." . $REGMSG;
+				$msg = "GRAB: $intro_msg " . $item_uppercase . ", $until_msg " . date( "M j, Y g:i:s A", $update_or_insert['end_time'] ) . ".\n\nYou have " . $time_left_formatted . " left.\n\nTo grab it, txt GRAB " . $item_uppercase . " to $INLA. $BP3" . $REGMSG;
 				$response['response'] = 'OK';
 				$response['reason'] = 'Charge success ' . $val . '/';				
 			} else {
@@ -265,7 +265,7 @@ if ( empty( $_REQUEST['others'] ) ) {
 		} else {
 			// Invalid request
 			if ( charge_request( $SENDCHARGE ) ) {
-				$msg = "Sorry, u sent an invalid request.\n\nPara unlimited grabs mo, send GRAB UNLI <item> to $INLA. P10/24hr validity\n\nPara malaman kung ano pwede mo i-grab, send GRAB BAG to $INLA. $BP1";
+				$msg = "Sorry, u sent an invalid request.\n\nPara unlimited grabs mo, send GRAB UNLI <item> to $INLA. $BP3\n\nPara malaman kung ano pwede mo i-grab, send GRAB BAG to $INLA. $BP1";
 				$response['response'] = 'NOK';
 				$response['reason'] = 'Invalid request';
 			}

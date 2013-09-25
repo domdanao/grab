@@ -102,6 +102,7 @@ $DEFAULT_PATH = $PROG_BASE . "/grab_main.php";
 // Boilerplate texts
 $BP1 = "P1.00/txt";
 $BP2 = "P1.00/grab";
+$BP3 = "P10/24h";
 
 
 ##################################################
