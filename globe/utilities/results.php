@@ -6,11 +6,10 @@ print "OK...";
 
 $grab_table = $_REQUEST['table'];
 
-$q = "SELECT DISTINCT( msisdn ) FROM `" . $grab_table . "`";
+$q = "SELECT DISTINCT( msisdn ) AS phone FROM `" . $grab_table . "`";
 $r = mysql_query( $q );
-$row = mysql_fetch_assoc( $r );
-
-foreach ($row as $msisdn) {
-	print $msisdn . "<br />\n";
+while ($row = mysql_fetch_array( $r )) {
+	echo $row['phone'] . "\n";
 }
+
 ?>
