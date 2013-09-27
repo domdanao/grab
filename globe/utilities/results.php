@@ -8,9 +8,8 @@ $grab_table = $_REQUEST['table'];
 
 $q = "SELECT DISTINCT( msisdn ) FROM `" . $grab_table . "`";
 $r = mysql_query( $q );
-foreach( $row = mysql_fetch_assoc( $r ) ) {
+while ( $row = mysql_fetch_assoc( $r ) ) {
 	print $row['msisdn'] . "<br />\n";	
 }
-
 
 ?>
