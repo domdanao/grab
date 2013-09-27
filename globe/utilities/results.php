@@ -2,6 +2,8 @@
 
 include '../include/config.php';
 
+print "OK...";
+
 $grab_table = $_REQUEST['table'];
 
 $q = "SELECT DISTINCT( msisdn ) FROM `" . $grab_table . "`";
