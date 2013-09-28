@@ -27,7 +27,7 @@ function results_hold_times( $msisdn, $table, $timenow = 0 ) {
 
 	$parts = preg_split('/_/', $table);
 	$gid = $parts[2];
-	$q = "SELECT UNIX_TIMESTAMP(grab_end) AS end_time FROM `$table` WHERE `gid` = $gid";
+	$q = "SELECT UNIX_TIMESTAMP(grab_end) AS end_time FROM `grab_bag` WHERE `gid` = $gid";
 	$rs = mysql_query($q);
 	$rw = mysql_fetch_assoc($rs);
 	$time_end = $rw['end_time'];
@@ -40,7 +40,7 @@ function results_hold_times( $msisdn, $table, $timenow = 0 ) {
 
 		if ( $holder_time ) {
 			$time_so_far = $row['totalholdtime'];
-			print "$time_end, $holder_time";
+			print "$time_end, $holder_time\n\n";
 			$inc_time = $time_end-$holder_time;
 			// incremental time added to totalholdtime
 			$totalholdtime = $time_so_far+$inc_time;
