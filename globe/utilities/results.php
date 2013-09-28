@@ -13,7 +13,7 @@ while ($row = mysql_fetch_assoc( $r )) {
 	$results[$phone] = $total_time;
 }
 
-asort($results);
+arsort($results);
 foreach ($results as $key => $val) {
 	print "$key\t$val\n";
 }
