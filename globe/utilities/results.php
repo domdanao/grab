@@ -32,7 +32,7 @@ function results_hold_times( $msisdn, $table, $timenow = 0 ) {
 	$rw = mysql_fetch_assoc($rs);
 	$time_end = $rw['end_time'];
 	
-	$query = "SELECT SUM( lost_time-grab_time ) AS totalholdtime FROM `$table` WHERE `msisdn` = '$msisdn' AND lost_time <> 0d";
+	$query = "SELECT SUM( lost_time-grab_time ) AS totalholdtime FROM `$table` WHERE `msisdn` = '$msisdn' AND lost_time <> 0";
 	$result = mysql_query( $query );
 	if ( $result !== FALSE ) {
 		$row = mysql_fetch_assoc( $result );
