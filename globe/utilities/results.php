@@ -44,6 +44,7 @@ function results_hold_times( $msisdn, $table, $timenow = 0 ) {
 			$inc_time = $time_end-$holder_time;
 			// incremental time added to totalholdtime
 			$totalholdtime = $time_so_far+$inc_time;
+			print "$time_so_far, $time_end, $holder_time, $inc_time\n\n";
 		} else {
 			$totalholdtime = $row['totalholdtime'];
 		}
