@@ -3,14 +3,14 @@
 require '../include/config.php';
 
 // output headers so that the file is downloaded rather than displayed
-//header('Content-Type: text/csv; charset=utf-8');
-//header('Content-Disposition: attachment; filename=data.csv');
+header('Content-Type: text/csv; charset=utf-8');
+header('Content-Disposition: attachment; filename=results.csv');
 
 // create a file pointer connected to the output stream
 $output = fopen('php://output', 'w');
 
 // output the column headings
-//fputcsv($output, array('MSISDN', 'Total Time', 'Name', 'Address', 'Age'));
+fputcsv($output, array('MSISDN', 'Total Time', 'Name', 'Address', 'Age'));
 
 $grab_table = $_REQUEST['table'];
 
@@ -33,11 +33,13 @@ while ($row = mysql_fetch_assoc( $r )) {
 		$address = $roo['address'];
 		$age = $roo['age'];
 	}
-	$contents[$total_time] = array('phone' => $phone, 'name' => $name, 'address' => $address, 'age' => $age);
+	$contents[$total_time] = array('phone' => $phone, 'total_time' => $total_time, 'name' => $name, 'address' => $address, 'age' => $age);
 }
 
 krsort($contents);
-echo '<pre>',print_r($contents),'</pre>';
+foreach ($contents as $key => $row) {
+	fputcsv($output, $row);
+}
 
 
 ##################################################
@@ -75,28 +77,4 @@ function results_hold_times( $msisdn, $table, $timenow = 0 ) {
 	return $totalholdtime;
 }
 
-function array_sort_func($a,$b=NULL) {
-	static $keys; 
-	if($b===NULL) return $keys=$a;
-	foreach($keys as $k) {
-		if(@$k[0]=='!') {
-			$k=substr($k,1);
-			if(@$a[$k]!==@$b[$k]) {
-				return strcmp(@$b[$k],@$a[$k]);
-			}
-		}
-		else if(@$a[$k]!==@$b[$k]) {
-			return strcmp(@$a[$k],@$b[$k]);
-		}
-	}
-	return 0;
-}
-
-function array_sort(&$array) {
-	if(!$array) return $keys;
-	$keys=func_get_args();
-	array_shift($keys);
-	array_sort_func($keys);
-	usort($array,"array_sort_func");
-}
 ?>
