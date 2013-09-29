@@ -2,21 +2,48 @@
 
 require '../include/config.php';
 
+// output headers so that the file is downloaded rather than displayed
+header('Content-Type: text/csv; charset=utf-8');
+header('Content-Disposition: attachment; filename=data.csv');
+
+// create a file pointer connected to the output stream
+$output = fopen('php://output', 'w');
+
+// output the column headings
+//fputcsv($output, array('MSISDN', 'Total Time', 'Name', 'Address', 'Age'));
+
 $grab_table = $_REQUEST['table'];
 
-$results = array();
+$contents = array();
+
 $q = "SELECT DISTINCT( msisdn ) AS phone FROM `" . $grab_table . "`";
 $r = mysql_query( $q );
 while ($row = mysql_fetch_assoc( $r )) {
+	// Array($phone, $total_time, $name, $address, $age)
 	$phone = $row['phone'];
-	$total_time = results_hold_times($phone, $grab_table);
-	$results[$phone] = $total_time;
+	$total_time = number_format(results_hold_times($phone, $grab_table));
+	$name = '(None)';
+	$address = '(None)';
+	$age = '(None)';
+	
+	if (is_registered($phone)) {
+		$res = mysql_query("SELECT name, address, age FROM members WHERE msisdn = '" . $phone . "'");
+		$roo = mysql_fetch_assoc($res);
+		$name = $roo['name'];
+		$address = $roo['address'];
+		$age = $roo['age'];
+	}
+	$contents[] = array('phone' => $phone, 'total_time' => $total_time, 'name' => $name, 'address' => $address, 'age' => $age);
 }
 
-arsort($results);
-foreach ($results as $key => $val) {
-	print "$key\t$val\n";
+foreach ($contents as $array) {
+	$total_times[] = $array['total_time'];
 }
+
+array_multisort($total_times, SORT_DESC, SORT_NUMERIC, $contents);
+
+echo '<pre>',print_r($contents,1),'</pre>';
+
 
 ##################################################
 // Get total holdtime
@@ -44,7 +71,7 @@ function results_hold_times( $msisdn, $table, $timenow = 0 ) {
 			$inc_time = $time_end-$holder_time;
 			// incremental time added to totalholdtime
 			$totalholdtime = $time_so_far+$inc_time;
-			print "$time_so_far, $time_end, $holder_time, $inc_time\n\n";
+			//print "$time_so_far, $time_end, $holder_time, $inc_time\n\n";
 		} else {
 			$totalholdtime = $row['totalholdtime'];
 		}
