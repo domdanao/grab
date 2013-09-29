@@ -21,7 +21,7 @@ $r = mysql_query( $q );
 while ($row = mysql_fetch_assoc( $r )) {
 	// Array($phone, $total_time, $name, $address, $age)
 	$phone = $row['phone'];
-	$total_time = number_format(results_hold_times($phone, $grab_table));
+	$total_time = results_hold_times($phone, $grab_table);
 	$name = '(None)';
 	$address = '(None)';
 	$age = '(None)';
