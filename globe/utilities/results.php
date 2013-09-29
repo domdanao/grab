@@ -41,7 +41,7 @@ while ($row = mysql_fetch_assoc( $r )) {
 foreach ($contents as $key => $row) {
 	$total_time[$key] = $row['total_time'];
 }
-array_multisort($total_time, SORT_DESC, SORT_NUMERIC, $contents);
+array_multisort($total_time, SORT_DESC, SORT_NUMERIC, &$contents);
 
 echo '<pre>',print_r($contents),'</pre>';
 
