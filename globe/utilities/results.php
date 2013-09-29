@@ -33,16 +33,10 @@ while ($row = mysql_fetch_assoc( $r )) {
 		$address = $roo['address'];
 		$age = $roo['age'];
 	}
-	$contents[] = array('phone' => $phone, 'total_time' => $total_time, 'name' => $name, 'address' => $address, 'age' => $age);
+	$contents[$total_time] = array('phone' => $phone, 'name' => $name, 'address' => $address, 'age' => $age);
 }
 
-//array_sort($contents,'!total_time');
-
-foreach ($contents as $key => $row) {
-	$total_time[$key] = $row['total_time'];
-}
-array_multisort($total_time, SORT_DESC, SORT_NUMERIC, $contents);
-
+krsort($contents);
 echo '<pre>',print_r($contents),'</pre>';
 
 
