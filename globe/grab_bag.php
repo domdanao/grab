@@ -82,8 +82,24 @@ if ( $num = count( $running ) ) {
 		if ( mysql_num_rows( $result ) ) {
 			$row = mysql_fetch_assoc( $result );
 			// There is an item
-			$msg = "GRAB: " . strtoupper( $row['keyword'] ) . " - " . $row['info'] . "\n";
-			$msg .= "\nText GRAB " . strtoupper( $row['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
+
+			/*
+			GRAB A GADGET PROMO:
+
+			<item> is the featured gadget for the week!
+
+			Grab it now for only P88! Text GRAB <item> to 2889.
+
+			Text HELP GRAB for other keywords. P1/grab DTI6597
+			*/
+
+			$msg = "GRAB A GADGET PROMO:\n\n";
+			$msg .= strtoupper( $row['keyword'] ) . " is the featured gadget for the week!\n\n";
+			$msg .= "Grab it now for only P88! Text GRAB " . strtoupper( $row['keyword'] ) . " to $INLA.\n\n";
+			$msg .= "Text HELP GRAB for other keywords. $BP2 DTI6597";
+			
+			//$msg = "GRAB: " . strtoupper( $row['keyword'] ) . " - " . $row['info'] . "\n";
+			//$msg .= "\nText GRAB " . strtoupper( $row['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
 		} else {
 			$msg = "GRAB: Walang ganyang item sa Grab Bag ngayon. $item, $smsc_time, $BP1" . $REGMSG;
 		}
