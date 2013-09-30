@@ -8,25 +8,51 @@ require_once 'include/config.php';
 
 ##################################################
 /*
-// LIST TEST PHONES HERE
-$allowed = array(
-	'',
-	'',
-	''
-	);
-if (!in_array($_REQUEST['from'], $allowed)) {
-	exit;
-}
-
-*/
-
-/*
 REQUEST PARAMETERS
 motxid
 msisdn
 message
 operatorid
 */
+
+
+##################################################
+// See if all parameters exist
+if 	(	!array_key_exists( 'motxid', $_REQUEST ) or
+		!array_key_exists( 'msisdn', $_REQUEST ) or
+		!array_key_exists( 'message', $_REQUEST ) or
+		!array_key_exists( 'operatorid', $_REQUEST )
+	)
+{
+	$response = array(
+		'response'	=>	'ERROR',
+		'reason'	=>	'One or more parameters missing',
+		'request'	=>	$_REQUEST	
+	);
+	print json_encode( $response, JSON_PRETTY_PRINT );
+	exit();
+}
+
+
+##################################################
+// See if all parameters have value (not empty)
+if 	( 	empty ($_REQUEST['motxid']) or
+		empty ($_REQUEST['msisdn']) or
+		empty ($_REQUEST['message']) or
+		empty ($_REQUEST['operatorid'])
+	)
+{
+	$response = array(
+		'response'	=>	'ERROR',
+		'reason'	=>	'One or more parameters empty',
+		'request'	=>	$_REQUEST	
+	);
+	print json_encode( $response, JSON_PRETTY_PRINT );
+	exit();
+}
+
+
+$tran_id = $_REQUEST['motxid'];
 
 
 ##################################################
@@ -41,7 +67,7 @@ $params = '';
 $total_words = count( $word_arr );
 if ( $total_words > 1 ) {
 	$second_key = strtolower( $word_arr[1] );
-	// This is to handle GRAB REG Mark Sy/25/1 Rizal Ave, Manila
+	// This is to handle "GRAB REG Mark Sy/25/1 Rizal Ave, Manila" pattern
 	if ( $total_words > 2 ) {
 		$new_arr = array_slice( $word_arr, 2 );
 		if ( count( $new_arr ) > 1 ) {
@@ -83,6 +109,9 @@ if ( in_array( 'grab', $translated ) ) {
 	}
 	if ( in_array( 'reg', $translated ) ) {
 		$second_key = 'reg';
+	}
+	if ( in_array( 'unli', $translated ) ) {
+		$second_key = 'unli';
 	}
 }
 
@@ -135,24 +164,39 @@ $result = mysql_query( $query );
 // Now let us see what happened to our MySQL query
 if ( mysql_affected_rows() == -1 ) {
 	// Notify program owner
-	$SENDSMS['mo_id'] = 0;
-	$SENDSMS['txid'] = $_REQUEST['motxid'];
-	$SENDSMS['mobtel'] = $PROGRAM_OWNER;
-	$SENDSMS['message'] = 'ERROR:globe/grab.php:fail_insert:query:'. $query;
-	hit_http_url($SENDSMS['url'], $SENDSMS['data'], 'get');
+	$SENDSMS['parameters']['mo_id'] = 0;
+	$SENDSMS['parameters']['txid'] = $_REQUEST['motxid'];
+	$SENDSMS['parameters']['mobtel'] = $PROGRAM_OWNER;
+	$SENDSMS['parameters']['message'] = 'ERROR:globe/grab.php:fail_insert:query:'. $query;
+	hit_http_url( $SENDSMS['url'], $SENDSMS['data'], 'get' );
 	exit();
 } else {
 	$mo_id = mysql_insert_id();
 }
 
 
+/*
+##################################################
+// Ban time
+$current_time = strtotime('now');
+if ( $current_time > strtotime( $BAN_TIME_START ) && $current_time < strtotime( $BAN_TIME_END ) ) {
+	$SENDSMS['parameters']['mo_id'] = $mo_id;
+	$SENDSMS['parameters']['txid'] = $_REQUEST['motxid'];
+	$SENDSMS['parameters']['message'] = $BAN_MSG;
+	$SENDSMS['parameters']['mobtel'] = $mo_from;
+	// Send the welcome message
+	sms_mt_request( $SENDSMS );
+}
+*/
+
+
 ##################################################
 // First time to send?
 if ( first_send( $mo_from, $dblink ) === FALSE ) {
-	$SENDSMS['mo_id'] = $mo_id;
-	$SENDSMS['txid'] = $_REQUEST['motxid'];
-	$SENDSMS['message'] = $WELCOME_MSG;
-	$SENDSMS['mobtel'] = $mo_from;
+	$SENDSMS['parameters']['mo_id'] = $mo_id;
+	$SENDSMS['parameters']['txid'] = $_REQUEST['motxid'];
+	$SENDSMS['parameters']['message'] = $WELCOME_MSG;
+	$SENDSMS['parameters']['mobtel'] = $mo_from;
 	// Send the welcome message
 	sms_mt_request( $SENDSMS );
 }
@@ -219,6 +263,26 @@ elseif
 	$http_params['others'] = $params;
 }
 
+elseif
+
+// 2ND KEYWORD: UNLI
+// GRAB UNLI
+( $second_key == 'unli' ) {
+	$program_path = $UNLI_PATH;
+	$http_params['others'] = $params;
+}
+
+/*
+elseif
+
+// 2ND KEYWORD: TEST
+// GRAB TEST
+( $second_key == 'test' ) {
+	$program_path = $TEST_PATH;
+	$http_params['others'] = $params;
+}
+*/
+
 else {
 	$program_path = $DEFAULT_PATH;
 	$http_params['keyword'] = $main_key;
@@ -234,18 +298,22 @@ else {
 
 ##################################################
 // Hit the URL
-$http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $PROG_BASE . $program_path;
-
-// $full_request = $http_url . "?" . http_build_query( $http_params );
-// print "\n\n$full_request\n";
+$response['http_url'] = $http_url = 'http://' . $PROG_HOST . ':' . $PROG_PORT . $program_path;
+$response['http_params'] = $http_params;
 
 $rep = hit_http_url( $http_url, $http_params, 'get' );
+$response['http_code'] = $rep['http_code'];
+$response['total_time'] = $rep['total_time'];
+//$response['body_content'] = $rep['body_content'];
 
-print "Response from ";
-print $rep["url"] . "\n\n" . $rep["body_content"] . "\n\n";
-
-print_r( $rep );
-
+// Parse body_content
+$parts = explode( "\r\n\r\nHTTP/", $rep['body_content'] );
+$parts = ( count( $parts ) > 1 ? 'HTTP/' : '') . array_pop( $parts );
+list( $headers, $body ) = explode( "\r\n\r\n", $parts, 2 );
+$body_array = json_decode( $body, TRUE );
+$response['http_reply'] = $body_array;
+	
+print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
 ##################################################
 ?>

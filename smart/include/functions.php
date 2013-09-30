@@ -4,7 +4,6 @@
 #########      F U N C T I O N S      ############
 ##################################################
 
-// AS OF August 21, 2013
 
 
 ##################################################
@@ -36,17 +35,15 @@ function is_registered( $msisdn ) {
 
 
 ##################################################
-// Check if sub has unlimiteeed subscription
+// Check if sub has unlimited subscription
 function is_unlisub( $msisdn ) {
 	global $dblink;
 	$timenow = date( "Y-m-d H:i:s" );
-	if ( $row = is_registered( $msisdn ) ) {
-		$result = mysql_query( "SELECT * FROM `unlisubs` WHERE `mo_id` = '" . $row['mo_id'] . "' AND ('" . $timenow . "' BETWEEN `time_start` AND `time_end`)" );
-		if ( mysql_num_rows( $result ) ) {
-			return mysql_fetch_assoc( $result );
-		} else {
-			return FALSE;
-		}
+	$result = mysql_query( "SELECT * FROM `unlisubs` WHERE `msisdn` = '" . $msisdn . "' AND ('" . $timenow . "' BETWEEN `start_time` AND `end_time`)" );
+	if ( mysql_num_rows( $result ) ) {
+		return mysql_fetch_assoc( $result );
+	} else {
+		return FALSE;
 	}
 }
 
@@ -165,10 +162,19 @@ function duration_out( $array ) {
 
 
 ##################################################
-function MakeDirectory($dir, $mode = 0755) {
-	if ( is_dir( $dir ) || @mkdir( $dir, $mode ) ) return TRUE;
-	if ( !MakeDirectory( dirname( $dir ), $mode ) ) return FALSE;
-	return @mkdir( $dir, $mode );
+// Print duration properly, with no microseconds
+function duration_out_plain( $array ) {
+	$ret = array();
+	$added = FALSE;
+	foreach ( $array as $k => $v ) {
+		if ( $v > 0 || $added ) {
+			$added = TRUE;
+			if ( $k == 'sec' ) settype( $v, "integer" );
+			if ( $v > 1 ) $k .= 's';
+			$ret[] = $v . $k;
+		}
+	}
+	return join(" ", $ret);
 }
 
 
@@ -218,7 +224,7 @@ function record_mt_msg( $data ) {
 		reqtime = '" . $reqtime . "',
 		charge_code = '" . $data['action'] . "'";
 	$result = mysql_query($query);
-	if (mysql_affected_rows() == -1) {
+	if ( mysql_affected_rows() == -1 ) {
 		return FALSE;
 	} else {
 		return mysql_insert_id();
@@ -324,10 +330,9 @@ function http_req_rep( $data ) {
 		total_time = " . $data['total_time'] . ",
 		body_content = '" . mysql_real_escape_string( $data['body_content'] ) . "',
 		trans_type = '" . $data['trans_type'] . "'";
-	// print "\n\n\nQUERY: $query \n\n\n";
 	$result = mysql_query( $query );
 	if (mysql_affected_rows() == -1) {
-		print "MySQL said: " . mysql_error() . "\n\n";
+		//print "MySQL said: " . mysql_error() . "\n\n";
 		return FALSE;
 	} else {
 		return mysql_insert_id();
@@ -341,9 +346,10 @@ function charge_request( $sendcharge ) {
 	global $dblink;
 	// Check for mo_id and other mandatory parameters for charging
 	if	(
-		empty( $sendcharge['mo_id'] ) or
-		empty( $sendcharge['parameters']['CSP_Txid'] ) or
-		empty( $sendcharge['parameters']['SUB_C_Mobtel'] )
+		empty( $sendcharge['parameters']['mo_id'] ) or
+		empty( $sendcharge['parameters']['txid'] ) or
+		empty( $sendcharge['parameters']['mobtel'] ) or
+		empty( $sendcharge['parameters']['charge'] )
 		)
 		{
 		return FALSE;
@@ -354,7 +360,7 @@ function charge_request( $sendcharge ) {
 		$http_end_time = microtime( TRUE );
 
 		$sendcharge_result = array(
-			'mo_id'			=> $sendcharge['mo_id'],
+			'mo_id'			=> $sendcharge['parameters']['mo_id'],
 			'req_type'		=> 'GET',
 			'url'			=> $charge_it['url'],
 			'time_start'	=> $http_start_time,
@@ -362,7 +368,7 @@ function charge_request( $sendcharge ) {
 			'time_recd'		=> $http_end_time,
 			'total_time'	=> $charge_it['total_time'],
 			'body_content'	=> $charge_it['body_content'],
-			'trans_type'	=> 'CHG',
+			'trans_type'	=> 'CHG'.$sendcharge['parameters']['charge'],
 			);
 
 		if ( http_req_rep( $sendcharge_result ) ) {
@@ -386,11 +392,10 @@ function charge_request( $sendcharge ) {
 function sms_mt_request( $sendsms ) {
 	global $dblink;
 	if	(
-		empty( $sendsms['mo_id'] ) or
-		empty( $sendsms['parameters']['SMS_MsgTxt'] ) or
-		empty( $sendsms['parameters']['CSP_Txid'] ) or
-		empty( $sendsms['parameters']['SUB_C_Mobtel'] ) or
-		empty( $sendsms['parameters']['SUB_R_Mobtel'] )
+		empty( $sendsms['parameters']['mo_id'] ) or
+		empty( $sendsms['parameters']['message'] ) or
+		empty( $sendsms['parameters']['txid'] ) or
+		empty( $sendsms['parameters']['mobtel'] ) 
 		)
 		{
 		return FALSE;
@@ -401,7 +406,7 @@ function sms_mt_request( $sendsms ) {
 		$http_end_time = microtime( TRUE );
 
 		$sendsms_result = array(
-			'mo_id'			=> $sendsms['mo_id'],
+			'mo_id'			=> $sendsms['parameters']['mo_id'],
 			'req_type'		=> 'GET',
 			'url'			=> $sms_it['url'],
 			'time_start'	=> $http_start_time,
@@ -411,7 +416,7 @@ function sms_mt_request( $sendsms ) {
 			'body_content'	=> $sms_it['body_content'],
 			'trans_type'	=> 'MTFREE',
 			);
-
+		
 		if ( http_req_rep( $sendsms_result ) ) {
 			if ( $sms_it["http_code"] === 200 ) {
 				return $sendsms_result;
@@ -427,35 +432,13 @@ function sms_mt_request( $sendsms ) {
 	}
 }
 
-
 ##################################################
-//Logging
-function write2log ( $file, $text ) {
-	if ( !file_exists( $file ) ) {
-		touch( $file );
-	}
-	$lh = fopen( $file, 'a' );
-	flock( $lh,LOCK_EX );
-	fwrite( $lh, $text );
-	flock( $lh,LOCK_UN );
-	fclose( $lh );
+// Send content
+function get_content() {
+	include "content.php";
+	shuffle($CONTENT);
+	return $CONTENT[0];
 }
 
-
 ##################################################
-// Format of the MSISDN is 09xxxxxxxxx
-function normalize_msisdn( $msisdn ) {
-	if ( preg_match( "/^09[0-9]{2}[0-9]{7}$/", $msisdn ) ) {
-		return $msisdn;
-	} else {
-		$msisdn = preg_replace( "/^\+/", "", $msisdn );	# strip plus sign
-		$msisdn = preg_replace( "/^00/", "", $msisdn );	# strip double zero (00639xxyyyyyyy)
-		$msisdn = preg_replace( "/^63/", "0", $msisdn ); # replace starting 63 with 0
-		return $msisdn;
-	}
-}
-
-
-##################################################
-// print "Good";
 ?>

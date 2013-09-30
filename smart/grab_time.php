@@ -16,10 +16,9 @@ require_once 'include/config.php';
 ##################################################
 // HTTP Request Variables
 
-$SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['parameters']['SUB_C_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['SUB_R_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['CSP_Txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['parameters']['mo_id'] = $mo_id = $_REQUEST['mo_id'];
+$SENDSMS['parameters']['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['parameters']['txid'] = $tran_id = $_REQUEST['tran_id'];
 $main_key = $_REQUEST['keyword'];
 $param = strtolower( $_REQUEST['param'] );
 $others = trim( $_REQUEST['others'] );
@@ -42,6 +41,17 @@ $msg = '';
 ##################################################
 // DEFAULT CHARGING BEHAVIOR
 $do_charge = TRUE;
+$charge_val = 100;
+
+
+##################################################
+// INITIALIZE RESPONSE
+$response = array(
+	'response'	=>	'',
+	'reason'	=>	'',
+	'message'	=>	'',
+	'charge'	=>	$charge_val
+);
 
 
 ##################################################
@@ -57,7 +67,7 @@ if ( $num = count( $running ) ) {
 		// Figure out the table name
 		$table = "grab_".$row['keyword']."_".$row['gid'];
 		// See if sub has grab
-		$grabtime = grab_time( $sender, $table, $dblink );
+		$grabtime = total_hold_time( $sender, $table, microtime( TRUE ) );
 		if ( $grabtime ) {
 			if ( !empty( $_REQUEST['others'] ) ) {
 				$grab_entries = array();
@@ -72,8 +82,8 @@ if ( $num = count( $running ) ) {
 	##################################################
 	// Go through the arrays
 	if ( count( $grab_item_entry ) ) {
-		$parts = explode( "|", $grab_item_entry );
-		$msg = "GRAB: " . $parts[1] . " mo nang hawak ang " . $parts[0] . "\n\nPwede mo ‘to mbili for P88 only basta ikaw ang pnkamtagal na may hawak nito!\n\nFor more info txt HELP GRAB to $INLA. $BP1";
+		$parts = explode( "|", $grab_item_entry[0] );
+		$msg = "GRAB: " . $parts[1] . " mo nang hawak ang " . $parts[0] . "\n\nPwede mo 'to mbili for P88 only basta ikaw ang pnkamtagal na may hawak nito!\n\nFor more info txt HELP GRAB to $INLA. $BP1";
 	} elseif ( count( $grab_entries ) ) {
 		$msg = "GRAB: Heto ang grab time record mo for the ff grab items:\n\n";
 		foreach( $grab_entries as $bomba ) {
@@ -92,26 +102,33 @@ if ( $num = count( $running ) ) {
 ##################################################
 // Finish the program, charge/send, or send only
 
-$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+$SENDSMS['parameters']['message'] = $msg;
 
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
-	$SENDCHARGE['mo_id'] = $mo_id;
-	$SENDCHARGE['parameters']['CSP_Txid'] = $tran_id;
-	$SENDCHARGE['parameters']['SUB_C_Mobtel'] = $sender;
-	$SENDCHARGE['parameters']['CSP_A_Keyword'] = $CHG_VALS['250'];
+	$SENDCHARGE['parameters']['mo_id'] = $mo_id;
+	$SENDCHARGE['parameters']['txid'] = $tran_id;
+	$SENDCHARGE['parameters']['mobtel'] = $sender;
+	$SENDCHARGE['parameters']['charge'] = $charge_val;
 
 	// Send charge request
 	if ( charge_request( $SENDCHARGE ) ) {
 		// Send the SMS
-		sms_mt_request( $SENDSMS );
+		$response['response'] = 'OK';
+		$response['reason'] = 'Charge success ' . $charge_val . '/';
+		$response['message'] = $msg;
+		$response['charge'] = $charge_val;
+		if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 	}
 } else {
 	// No charging necessary, just send the SMS
-	sms_mt_request( $SENDSMS );
+	$response['response'] = 'OK';
+	$response['reason'] = 'OK';
+	$response['message'] = $msg;
+	$response['charge'] = 0;
+	if ( sms_mt_request( $SENDSMS ) ) $response['reason'] = 'SMS sent';
 }
 
-print "\n\n\n$msg\n\n\n";
-
+print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 exit();
 ?>

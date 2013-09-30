@@ -11,13 +11,21 @@ if ( $_REQUEST['operator'] !== 'GLOBE' ) {
 
 require_once 'include/config.php';
 
+##################################################
+// Charge amount, Php1.00, expressed in centavos
+$charge_val = 100;
+
+
+##################################################
+// DEFAULT CHARGING BEHAVIOR (PROD: TRUE)
+$do_charge = TRUE;
+
 
 ##################################################
 // HTTP Request Variables
-$SENDSMS['mo_id'] = $mo_id = $_REQUEST['mo_id'];
-$SENDSMS['parameters']['SUB_C_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['SUB_R_Mobtel'] = $sender = $_REQUEST['sender'];
-$SENDSMS['parameters']['CSP_Txid'] = $tran_id = $_REQUEST['tran_id'];
+$SENDSMS['parameters']['mo_id'] = $mo_id = $_REQUEST['mo_id'];
+$SENDSMS['parameters']['mobtel'] = $sender = $_REQUEST['sender'];
+$SENDSMS['parameters']['txid'] = $tran_id = $_REQUEST['tran_id'];
 $main_key = $_REQUEST['keyword'];
 $param = $_REQUEST['param'];
 $others = trim( $_REQUEST['others'] );
@@ -35,31 +43,26 @@ if ( !is_registered( $sender ) ) {
 ##################################################
 // INITIALIZE MESSAGE
 $msg = '';
+if ( is_unlisub( $sender ) ) $BP2 = '';
 
 
 ##################################################
-// DEFAULT CHARGING BEHAVIOR
-$do_charge = FALSE;
+// INITIALIZE RESPONSE
+$response = array(
+	'response'	=>	0,
+	'reason'	=>	'',
+	'message'	=>	'',
+	'charge'	=>	0
+);
 
 
 ##################################################
 // Inspect the Grab Bag and compose messages
 $running = grab_bag( $smsc_time, $_REQUEST['operator'], $dblink );
 if ( $num = count( $running ) ) {
-	if ( !empty( $_REQUEST['others'] ) ) {
-		// There is a third word in the request
-		// GRAB BAG <item>
-		$item = strtolower( $_REQUEST['others'] );
-		$item_details = check_item( $item, $smsc_time, $dblink );
-		if ( $item_details !== FALSE ) {
-			// There is an item
-			$msg = "GRAB: " . strtoupper( $item_details['keyword'] ) . " - " . $item_details['info'] . "\n";
-			$msg .= "\nText GRAB " . strtoupper( $item_details['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
-		} else {
-			$msg = "GRAB: Walang ganyang item sa Grab Bag ngayon. $BP1" . $REGMSG;
-		}
-	} else {
+	if ( empty( $_REQUEST['others'] ) ) {
 		// Sub just texted GRAB BAG
+		/* // This is the old msg
 		$msg .= "GRAB-In the Grab Bag ryt now:\n\n";
 		$count = 0;
 		foreach ( $running as $row ) {
@@ -71,6 +74,41 @@ if ( $num = count( $running ) ) {
 		}
 		$msg .= "\n\nGrab an item you want by texting GRAB <ITEM> to $INLA. $BP2";
 		$msg .= "\nFor more item info, txt GRAB BAG <ITEM> to $INLA. $BP1 " . $REGMSG;
+		*/
+		$msg = "GRAB A GADGET PROMO:\n\n";
+		$msg .= strtoupper( $row['keyword'] ) . " is the featured gadget for the week!\n\n";
+		$msg .= "Grab it now for only P88! Text GRAB " . strtoupper( $row['keyword'] ) . " to $INLA.\n\n";
+		$msg .= "Text HELP GRAB for other keywords. $BP2 DTI6597";
+	} else {
+		// There is a third word in the request
+		// GRAB BAG <item>
+		$item = strtolower( $_REQUEST['others'] );
+		$query = "SELECT * FROM `grab_bag` WHERE `keyword` = '$item' AND '$smsc_time' BETWEEN `grab_start` AND `grab_end`";
+		$result = mysql_query($query);
+		if ( mysql_num_rows( $result ) ) {
+			$row = mysql_fetch_assoc( $result );
+			// There is an item
+
+			/*
+			GRAB A GADGET PROMO:
+
+			<item> is the featured gadget for the week!
+
+			Grab it now for only P88! Text GRAB <item> to 2889.
+
+			Text HELP GRAB for other keywords. P1/grab DTI6597
+			*/
+
+			$msg = "GRAB A GADGET PROMO:\n\n";
+			$msg .= strtoupper( $row['keyword'] ) . " is the featured gadget for the week!\n\n";
+			$msg .= "Grab it now for only P88! Text GRAB " . strtoupper( $row['keyword'] ) . " to $INLA.\n\n";
+			$msg .= "Text HELP GRAB for other keywords. $BP2 DTI6597";
+			
+			//$msg = "GRAB: " . strtoupper( $row['keyword'] ) . " - " . $row['info'] . "\n";
+			//$msg .= "\nText GRAB " . strtoupper( $row['keyword'] ) . " to $INLA at baka mabili mo ito for only P88! $BP2" . $REGMSG;
+		} else {
+			$msg = "GRAB: Walang ganyang item sa Grab Bag ngayon. $item, $smsc_time, $BP1" . $REGMSG;
+		}
 	}
 } else {
 	// No current items in grab bag. Must not happen.
@@ -82,44 +120,38 @@ if ( $num = count( $running ) ) {
 ##################################################
 // Finish the program
 
-$SENDSMS['parameters']['SMS_MsgTxt'] = $msg;
+$SENDSMS['parameters']['message'] = $msg;
 
 if ( $do_charge ) {
 	// Set up charging (mandatory variables)
-	$SENDCHARGE['mo_id'] = $mo_id;
-	$SENDCHARGE['parameters']['CSP_Txid'] = $tran_id;
-	$SENDCHARGE['parameters']['SUB_C_Mobtel'] = $sender;
-	$SENDCHARGE['parameters']['CSP_A_Keyword'] = $CHG_VALS['250'];
+	$SENDCHARGE['parameters']['mo_id']	=	$mo_id;
+	$SENDCHARGE['parameters']['txid']	=	$tran_id;
+	$SENDCHARGE['parameters']['mobtel']	=	$sender;
+	$SENDCHARGE['parameters']['charge']	=	$charge_val;
 
 	// Send charge request
 	if ( charge_request( $SENDCHARGE ) ) {
+		// Compose response
+		$response['charge'] = $charge_val;
+		$response['reason'] .= 'Charge success ' . $charge_val . '/';
 		// Send the SMS
-		sms_mt_request( $SENDSMS );
+		if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 	}
 } else {
 	// No charging necessary, just send the SMS
-	sms_mt_request( $SENDSMS );
+	$response['charge'] = 0;
+	if ( sms_mt_request( $SENDSMS ) ) $response['reason'] .= 'SMS sent';
 }
-
-
-print "\n\n\n$msg\n\n\n";
-
-
-exit();
 
 
 ##################################################
-// Check item in GRAB BAG
-function check_item( $item, $smsc_time, $dblink ) {
-	$item = strtolower($item);
-	$query = "SELECT * FROM `grab`.`grab_bag`
-		WHERE `grab`.`grab_bag`.`keyword` = '$item'
-		AND '$smsc_time' BETWEEN `grab_start` AND `grab_end`";
-	$result = mysql_query( $query );
-	if ( mysql_num_rows( $result ) ) {
-		return mysql_fetch_assoc( $result );
-	} else {
-		return FALSE;
-	}
-}
+// If we reached here, we're cool, so send response
+$response['response'] = 'OK';
+$response['message'] = $msg;
+
+print json_encode( $response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+
+exit();
+
+##################################################
 ?>

@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `grab`
 --
-CREATE DATABASE IF NOT EXISTS `grab` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `grab`;
+CREATE DATABASE IF NOT EXISTS `globe_grab` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `globe_grab`;
 
 -- --------------------------------------------------------
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `grab_bag` (
   KEY `keyword` (`keyword`),
   KEY `grab_start` (`grab_start`),
   KEY `grab_end` (`grab_end`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='The Grab Bag' AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='The Grab Bag' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `grab_ipad_1` (
   KEY `msisdn` (`msisdn`),
   KEY `hold_time` (`lost_time`),
   KEY `grab_time` (`grab_time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Grab table for ipad' AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Grab table for ipad' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `http_req_rep` (
   KEY `port` (`port`),
   KEY `path` (`path`),
   KEY `mo_id` (`mo_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=69 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   PRIMARY KEY (`m_id`),
   KEY `msisdn` (`msisdn`),
   KEY `alert` (`alert`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Members table' AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Members table' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `msg_in` (
   KEY `msisdn` (`msisdn`),
   KEY `msg_id` (`msg_id`),
   KEY `raw_msg` (`raw_msg`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Inbound message' AUTO_INCREMENT=53 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Inbound message' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

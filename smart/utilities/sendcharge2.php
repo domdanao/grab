@@ -85,9 +85,29 @@ if (!$mo_id or !$keyword or !$txid or !$mobtel) {
 			$response['reason'] = $reply['http_code'];
 		}
 	}
+	
+	$reply2 = hit_http_url($SENDCHARGE['url'], $SENDCHARGE['parameters'], 'get');
+
+	if (isset($reply2['errno']) or isset($reply2['errtxt'])) {
+		// Curl error
+		$response['response'] = '/ERROR';
+		$response['reason'] = '/CURL error ' . $reply['errno'] . '/' . $reply['errtxt'];
+	} else {
+		$response['headers'] = $reply2['headers'];
+		if ($reply2['http_code'] == 200) {
+			// We were able to charge
+			$response['response'] = '/OK';
+			$response['reason'] = '/'.$reply2['http_code'];
+		} else {
+			// Charge not done
+			$response['response'] = '/NOK';
+			$response['reason'] = '/'.$reply2['http_code'];
+		}
+	}
+
 }
 
-print json_encode($response,JSON_PRETTY_PRINT);
+print json_encode( $response, JSON_PRETTY_PRINT );
 
 
 ##################################################
