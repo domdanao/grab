@@ -62,23 +62,26 @@ $running = grab_bag( $smsc_time, $_REQUEST['operator'], $dblink );
 if ( $num = count( $running ) ) {
 	if ( empty( $_REQUEST['others'] ) ) {
 		// Sub just texted GRAB BAG
-		$msg .= "GRAB-In the Grab Bag ryt now:\n\n";
-		$count = 0;
+		$msg = "GRAB A GADGET PROMO:\n\n";
+		//$msg .= "GRAB-In the Grab Bag ryt now:\n\n";
+		$key = '';
+		//$count = 0;
 		foreach ( $running as $row ) {
+			/* // Classic list message
 			$count++;
 			if ( $count > 1) $msg .= "\n";
 			if ( $num > 1 ) $msg .= "Item $count: ";
 			$msg .= strtoupper( $row['keyword'] );
 			if ( $num == 1 ) $msg .=  " - " . $row['adcopy'];
+			*/
+			$key = $row['keyword'];
 		}
-		$msg .= "\n\nGrab an item you want by texting GRAB <ITEM> to $INLA. $BP2";
-		$msg .= "\nFor more item info, txt GRAB BAG <ITEM> to $INLA. $BP1 " . $REGMSG;
-
-/*		$msg = "GRAB A GADGET PROMO:\n\n";
-		$msg .= strtoupper( $row['keyword'] ) . " is the featured gadget for the week!\n\n";
-		$msg .= "Grab it now for only P88! Text GRAB " . strtoupper( $row['keyword'] ) . " to $INLA.\n\n";
+		// Classic message
+		//$msg .= "\n\nGrab an item you want by texting GRAB <ITEM> to $INLA. $BP2";
+		//$msg .= "\nFor more item info, txt GRAB BAG <ITEM> to $INLA. $BP1 " . $REGMSG;
+		$msg .= strtoupper( $key ) . " is the featured gadget for the week!\n\n";
+		$msg .= "Grab it now for only P88! Text GRAB " . strtoupper( $key ) . " to $INLA.\n\n";
 		$msg .= "Text HELP GRAB for other keywords. $BP2 DTI6597";
-*/
 	} else {
 		// There is a third word in the request
 		// GRAB BAG <item>
