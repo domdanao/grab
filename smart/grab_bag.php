@@ -4,8 +4,8 @@
 // LIST GRAB BAG ITEMS
 
 
-// Just to be safe, if not via Globe, exit
-if ( $_REQUEST['operator'] !== 'GLOBE' ) {
+// Just to be safe, if not via Smart, exit
+if ( $_REQUEST['operator'] !== 'SMART' ) {
 	exit();
 }
 

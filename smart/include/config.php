@@ -1,7 +1,7 @@
 <?php
 ##################################################
 ##################################################
-### CONFIGURATION FILE FOR GLOBE GRAB SERVICE ####
+### CONFIGURATION FILE FOR SMART GRAB SERVICE ####
 ##################################################
 ##################################################
 
@@ -19,7 +19,7 @@ require 'functions.php';
 
 ##################################################
 // Operator
-$OPERATOR = 'GLOBE';
+$OPERATOR = 'SMART';
 
 
 ##################################################
@@ -70,7 +70,7 @@ $OUTLA = '28891';
 // Program host
 $PROG_HOST = 'grab.stickr.ph'; #$_SERVER['SERVER_ADDR'];
 $PROG_PORT = 80;
-$PROG_BASE = '/globe';
+$PROG_BASE = '/smart';
 
 
 ##################################################
@@ -132,10 +132,10 @@ $WELCOME_MSG = "Welcome to GRAB A GADGET PROMO! Available commands:\n
 
 ##################################################
 ### SENDSMS URL and PARAMETERS
-### This is for Globe SMS MT service
+### This is for SMART SMS MT service
 
 $SENDSMS = array(
-	'url'		=> 'http://180.87.143.49:8888/grab/globe/sendsms.php',
+	'url'		=> 'http://180.87.143.49:8888/grab/SMART/sendsms.php',
 	'parameters'	=> array(
 		'mo_id'		=> '',			// MO_ID, MANDATORY
 		'txid'		=>	'',			// TXID, MANDATORY
@@ -148,10 +148,10 @@ $SENDSMS = array(
 
 ##################################################
 ### CHARGING URL and PARAMETERS
-### This is for Globe RT Billing service
+### This is for SMART RT Billing service
 
 $SENDCHARGE = array(
-	'url'		=>	'http://180.87.143.49:8888/grab/globe/sendcharge.php',
+	'url'		=>	'http://180.87.143.49:8888/grab/SMART/sendcharge.php',
 	'parameters'		=>	array(
 		'mo_id'		=>	'',			// MO_ID, MANDATORY
 		'txid'		=>	'',			// TXID, MANDATORY
